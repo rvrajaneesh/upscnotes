@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chronicler — UPSC History Hub</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📜</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2ede0;
+    --card:#fbf9f2;
+    --card-alt:#ffffff;
+    --ink:#20190f;
+    --ink-soft:#6f6656;
+    --ink-faint:#a89f8c;
+    --line:#e4dcc4;
+    --dark:#19140d;
+    --dark-soft:#2a2317;
+    --gold:#c99a3c;
+    --gold-deep:#a97b23;
+    --green:#3f6b4f;
+    --green-soft:#e6efe7;
+    --era-ancient:#c99a3c;
+    --era-medieval:#a13b3b;
+    --era-modern:#2f7d3a;
+    --era-postindep:#2a5599;
+    --era-worldhist:#6a3fa0;
+    --radius:16px;
+    --radius-sm:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{ font-family:'Fraunces',serif; }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+
+  /* ---------- Navbar ---------- */
+  header.navbar{
+    background:linear-gradient(120deg,#1c2b3a,#213a4d 55%,#1c2b3a);
+    color:#f2ede0;
+    padding:16px 32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{
+    width:30px;height:30px;border-radius:8px;
+    background:linear-gradient(145deg,#4fb0c9,#2a7f99);
+    display:flex;align-items:center;justify-content:center;
+    font-size:15px;
+  }
+  .brand-name{ font-family:'Fraunces',serif; font-weight:600; font-size:20px; letter-spacing:.2px; }
+  .brand-name .bn-soft{ font-weight:500; color:#eef6f8; }
+  .brand-name .bn-one{ font-style:italic; font-weight:600; color:#5fc9e0; margin:0 1px; }
+  .brand-name .bn-stop{ font-weight:700; color:#f2ede0; }
+  .nav-link{ color:#cfc6b2; font-size:14px; text-decoration:none; }
+  .nav-link:hover{ color:#fff; }
+
+  /* ---------- Page shell ---------- */
+  .shell{ max-width:1360px; margin:0 auto; padding:28px 32px 60px; }
+
+  .eyebrow{
+    text-transform:uppercase; letter-spacing:1.2px; font-size:11.5px;
+    color:var(--ink-faint); font-weight:600; margin:0 0 10px;
+  }
+  .track-tabs{ display:flex; gap:26px; border-bottom:1px solid var(--line); margin-bottom:26px; }
+  .track-tab{
+    background:none;border:none;cursor:pointer;
+    font-family:'Inter',sans-serif; font-size:15px; font-weight:600;
+    color:var(--ink-faint); padding:0 0 12px; position:relative;
+  }
+  .track-tab.active{ color:var(--ink); }
+  .track-tab.active::after{
+    content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--gold);
+  }
+  .track-tab .soon{ font-size:10px; font-weight:600; color:var(--ink-faint); margin-left:6px; }
+
+  .hero-row{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:26px; flex-wrap:wrap; }
+  .hero-row h1{ font-size:44px; font-weight:600; margin:0 0 8px; line-height:1.08; }
+  .hero-row h1 em{ font-style:italic; font-weight:500; color:var(--gold-deep); }
+  .hero-sub{ color:var(--ink-soft); font-size:15px; margin:0; max-width:520px; }
+  .hero-actions{ display:flex; gap:10px; }
+  .pill-btn{
+    background:rgba(255,255,255,.5); border:1px solid rgba(255,255,255,.65); border-radius:999px;
+    padding:9px 16px; font-size:13.5px; font-weight:600; color:var(--ink);
+    cursor:pointer; display:flex; align-items:center; gap:6px;
+    backdrop-filter:blur(10px) saturate(160%); -webkit-backdrop-filter:blur(10px) saturate(160%);
+    box-shadow:0 4px 14px rgba(120,100,60,.12), inset 0 1px 0 rgba(255,255,255,.6);
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .pill-btn:hover{ border-color:var(--gold); transform:translateY(-1px); box-shadow:0 8px 22px rgba(120,100,60,.18), inset 0 1px 0 rgba(255,255,255,.7); }
+  .pill-btn:active{ transform:translateY(0); }
+
+  /* legend popover */
+  .legend-wrap{ position:relative; }
+  .legend-pop{
+    display:none; position:absolute; right:0; top:calc(100% + 8px);
+    background:rgba(255,255,255,.72); border:1px solid rgba(255,255,255,.7); border-radius:var(--radius-sm);
+    backdrop-filter:blur(14px) saturate(160%); -webkit-backdrop-filter:blur(14px) saturate(160%);
+    padding:14px 16px; box-shadow:0 12px 30px rgba(20,16,8,.16); z-index:30; width:200px;
+  }
+  .legend-pop.show{ display:block; }
+  .legend-item{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-soft); padding:4px 0; }
+  .legend-dot{ width:9px;height:9px;border-radius:50%; flex:none; }
+
+  /* ---------- Main grid ---------- */
+  .grid{ display:grid; grid-template-columns: 330px 350px 1fr; gap:20px; align-items:start; }
+  @media (max-width: 1080px){ .grid{ grid-template-columns:1fr; } }
+
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px;
+    animation: cardIn .35s cubic-bezier(.16,1,.3,1);
+  }
+  .card-alt{ background:var(--card-alt); transition:margin-top .25s ease; }
+  @keyframes cardIn{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes rowIn{
+    from{ opacity:0; transform:translateX(-6px); }
+    to{ opacity:1; transform:translateX(0); }
+  }
+  .reanim{ animation: cardIn .35s cubic-bezier(.16,1,.3,1); }
+
+  /* ---- trail list column ---- */
+  .trail-head{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .trail-icon{
+    width:38px;height:38px;border-radius:10px; background:var(--dark); color:#f2ede0;
+    display:flex;align-items:center;justify-content:center; font-size:17px;
+  }
+  .trail-title{ font-weight:600; font-size:15.5px; line-height:1.2; }
+  .trail-meta{ font-size:11.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.5px; margin-top:2px; }
+
+  .search-input{
+    width:100%; padding:10px 12px; border:1px solid rgba(255,255,255,.7); border-radius:10px;
+    font-family:'Inter',sans-serif; font-size:13.5px; margin-bottom:14px;
+    background:rgba(255,255,255,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  }
+  .search-input:focus{ outline:none; border-color:var(--gold); background:rgba(255,255,255,.85); }
+
+  .chip-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px; }
+  .chip{
+    border:1px solid rgba(255,255,255,.6); background:rgba(255,255,255,.4); border-radius:999px; padding:6px 12px;
+    font-size:11.5px; font-weight:700; letter-spacing:.3px; text-transform:uppercase;
+    cursor:pointer; color:var(--ink-soft);
+    backdrop-filter:blur(8px) saturate(150%); -webkit-backdrop-filter:blur(8px) saturate(150%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .chip:hover{ transform:translateY(-1px); }
+  .chip.active{ color:var(--ink); font-weight:800; box-shadow:inset 0 1px 0 rgba(255,255,255,.6), 0 6px 16px rgba(0,0,0,.1); }
+
+  .group-block{
+    margin-bottom:16px; padding:14px 12px 12px; border-radius:16px;
+    background:var(--group-bg); border:1px solid var(--group-border);
+    animation: cardIn .3s ease backwards;
+  }
+  .group-block:nth-of-type(2){ animation-delay:.05s; }
+  .group-block:nth-of-type(3){ animation-delay:.1s; }
+  .group-block:nth-of-type(4){ animation-delay:.15s; }
+  .group-block:nth-of-type(5){ animation-delay:.2s; }
+  .topic-row:nth-of-type(2){ animation-delay:.03s; }
+  .topic-row:nth-of-type(3){ animation-delay:.06s; }
+  .topic-row:nth-of-type(4){ animation-delay:.09s; }
+  .topic-row:nth-of-type(5){ animation-delay:.12s; }
+  .sub-row:nth-of-type(2){ animation-delay:.03s; }
+  .sub-row:nth-of-type(3){ animation-delay:.06s; }
+  .sub-row:nth-of-type(4){ animation-delay:.09s; }
+  .sub-row:nth-of-type(5){ animation-delay:.12s; }
+  .sub-row:nth-of-type(6){ animation-delay:.15s; }
+  .group-eyebrow{ font-size:10.5px; font-weight:700; letter-spacing:1px; color:var(--group-text-soft, var(--ink-faint)); text-transform:uppercase; margin:0 0 2px; }
+  .group-eyebrow span.num{ color:var(--group-accent, var(--gold-deep)); margin-right:6px; }
+  .group-name{ font-family:'Fraunces',serif; font-size:15.5px; font-weight:600; margin:0 0 10px; display:flex; align-items:center; color:var(--ink); }
+  .group-dot{ width:8px; height:8px; border-radius:50%; margin-right:9px; flex:none; box-shadow:0 0 0 3px rgba(0,0,0,.04); }
+
+  .topic-row{
+    display:flex; align-items:center; gap:11px; padding:10px 10px; border-radius:12px;
+    cursor:pointer; border:1.5px solid transparent; margin-bottom:5px;
+    transition:background .15s ease, border-color .15s ease;
+    animation: rowIn .3s ease backwards;
+  }
+  .topic-row:hover{ background:rgba(255,255,255,.55); }
+  .topic-row.selected{
+    border-color: var(--accent-line, var(--green));
+    background: var(--accent-soft, var(--green-soft));
+    backdrop-filter:blur(6px);
+  }
+  .topic-icon-sm{
+    width:32px;height:32px;border-radius:8px; background:var(--icon-tint,#efe8d4); display:flex;align-items:center;justify-content:center;
+    font-size:14.5px; flex:none;
+  }
+  .topic-row.selected .topic-icon-sm{ background:rgba(255,255,255,.75); backdrop-filter:blur(6px); }
+  .topic-row-text{ flex:1; min-width:0; }
+  .topic-row-title{ font-size:13.5px; font-weight:600; line-height:1.25; }
+  .topic-row-sub{ font-size:11px; color:var(--ink-faint); margin-top:1px; }
+  .topic-row-chev{ color:var(--ink-faint); font-size:13px; }
+
+  /* ---- subtopics column ---- */
+  .sub-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding-bottom:12px; border-bottom:2px solid var(--accent-line, var(--line)); }
+  .sub-head-title{ font-size:11.5px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--ink-faint); }
+  .sub-progress{ font-size:11px; color:var(--ink-faint); }
+  .sub-row{
+    display:flex; align-items:flex-start; gap:10px; padding:9px 8px; border-radius:9px; cursor:pointer;
+    transition:background .15s ease;
+    animation: rowIn .3s ease backwards;
+  }
+  .sub-row:hover{ background:#f4efdf; }
+  .sub-row.active{ background:var(--accent-soft, var(--green-soft)); }
+  .sub-check{
+    width:17px;height:17px; border-radius:5px; border:1.5px solid var(--line); flex:none; margin-top:1px;
+    display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.7);
+    backdrop-filter:blur(4px); transition:background .15s ease, border-color .15s ease, transform .15s ease;
+  }
+  .sub-check:hover{ transform:scale(1.08); }
+  .sub-check.done{ background:var(--accent, var(--green)); border-color:var(--accent, var(--green)); color:#fff; font-size:11px; box-shadow:0 3px 10px var(--accent-shadow, rgba(63,107,79,.35)); }
+  .sub-label{ font-size:13px; line-height:1.35; color:var(--ink); }
+  .sub-label.done{ color:var(--ink-faint); text-decoration:line-through; }
+  .empty-note{ font-size:12.5px; color:var(--ink-faint); padding:6px 4px; }
+
+  /* ---- right detail panel ---- */
+  .detail{
+    background:var(--panel-bg, var(--dark)); color:#efe8d6; border-radius:var(--radius);
+    padding:30px 30px 26px; min-height:520px;
+    transition:background .3s ease, margin-top .25s ease; overflow:hidden; position:relative;
+    animation: cardIn .4s cubic-bezier(.16,1,.3,1);
+  }
+  .badge-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; }
+  .badge{
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.8px; text-transform:uppercase;
+    padding:5px 11px; border-radius:999px; color:#20190f;
+    box-shadow:0 3px 10px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.35);
+  }
+  .badge-count{ font-size:12px; color:#b8ae97; }
+  .detail-eyebrow{ font-size:11.5px; letter-spacing:1px; text-transform:uppercase; color:#a89b78; margin-bottom:8px; }
+  .detail-title{ font-family:'Fraunces',serif; font-weight:600; font-size:29px; line-height:1.15; margin:0 0 16px; color:#fbf6ea; }
+  .detail-blurb{ font-size:14.5px; line-height:1.6; color:#cfc6ae; margin-bottom:26px; }
+  .detail-crumb{ font-size:12.5px; color:#a89b78; margin-bottom:6px; }
+
+  .detail-btn{
+    width:100%; text-align:center; padding:13px; border-radius:12px; font-weight:700; font-size:13.5px;
+    cursor:pointer; margin-bottom:10px; letter-spacing:.2px; position:relative; z-index:1;
+    backdrop-filter:blur(16px) saturate(180%); -webkit-backdrop-filter:blur(16px) saturate(180%);
+    transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  }
+  .detail-btn:hover{ transform:translateY(-1.5px); filter:brightness(1.08); }
+  .detail-btn:active{ transform:translateY(0); }
+  .detail-btn.gold{
+    background:linear-gradient(135deg, var(--accent-a, rgba(201,154,60,.55)), var(--accent-b, rgba(201,154,60,.2)));
+    border:1px solid var(--accent-border, rgba(255,255,255,.35));
+    color:#fff8ea; box-shadow:0 10px 26px var(--accent-shadow, rgba(0,0,0,.3)), inset 0 1px 0 rgba(255,255,255,.3);
+  }
+  .detail-btn.dark{
+    background:rgba(255,255,255,.07); border:1px solid var(--accent-border-soft, rgba(255,255,255,.14));
+    color:#f2ede0; display:flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 6px 16px rgba(0,0,0,.2);
+  }
+  .detail-btn.dark:hover{ background:rgba(255,255,255,.12); }
+  .detail-btn.ghost{
+    background:rgba(255,255,255,.03); border:1px dashed var(--accent-border-soft, rgba(255,255,255,.28));
+    color:#e7dfc9;
+  }
+
+  .detail-divider{ height:1px; background:#33291a; margin:22px 0; position:relative; z-index:1; }
+  .note-label{ font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:#a89b78; margin-bottom:8px; position:relative; z-index:1; }
+  .note-text{ font-size:13px; line-height:1.6; color:#c7bd9f; position:relative; z-index:1; }
+
+  .prompt-box{
+    background:rgba(8,6,3,.55); border:1px solid var(--accent-border-soft, #332a1a); border-radius:12px; padding:16px;
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; line-height:1.55; color:#d8cdb0;
+    max-height:340px; overflow-y:auto; white-space:pre-wrap; margin-bottom:14px;
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); position:relative; z-index:1;
+  }
+  .prompt-box::-webkit-scrollbar{ width:8px; }
+  .prompt-box::-webkit-scrollbar-thumb{ background:#3c3322; border-radius:4px; }
+
+  .context-line{
+    font-size:13px; color:#f1ecdd; line-height:1.55; margin-bottom:20px; padding:12px 14px;
+    background:var(--accent-soft-dark, rgba(201,154,60,.16)); border-left:2px solid var(--accent, var(--gold)); border-radius:6px;
+    position:relative; z-index:1; backdrop-filter:blur(6px);
+  }
+  .badge-row, .detail-eyebrow, .detail-title, .detail-blurb, .detail-crumb{ position:relative; z-index:1; }
+
+  /* ---- notes ---- */
+  .badge-row-right{ display:flex; align-items:center; gap:10px; }
+  .notes-btn{
+    display:inline-flex; align-items:center; gap:5px; position:relative; z-index:1;
+    background:linear-gradient(135deg,#ffe066,#ffc93c); color:#3a2c05;
+    border:1px solid rgba(255,255,255,.6); border-radius:999px;
+    font-family:'Inter',sans-serif; font-size:11px; font-weight:800; letter-spacing:.3px; text-transform:uppercase;
+    padding:6px 12px; cursor:pointer;
+    box-shadow:0 4px 14px rgba(255,193,60,.4), inset 0 1px 0 rgba(255,255,255,.65);
+    transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  }
+  .notes-btn:hover{ transform:translateY(-1.5px); filter:brightness(1.06); box-shadow:0 8px 20px rgba(255,193,60,.5), inset 0 1px 0 rgba(255,255,255,.7); }
+  .notes-btn:active{ transform:translateY(0); }
+  .notes-btn.has-note{ background:linear-gradient(135deg,#ffd23f,#ff9f1c); box-shadow:0 4px 16px rgba(255,159,28,.55), inset 0 1px 0 rgba(255,255,255,.6); }
+  .notes-wrap{ margin-bottom:20px; position:relative; z-index:1; animation: cardIn .25s ease; }
+  .notes-toolbar{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+  .notes-tool-btn{
+    background:rgba(255,255,255,.9); border:1px solid #ffd23f; border-radius:8px;
+    color:#3a2c05; font-family:'Inter',sans-serif; font-size:12.5px; font-weight:700;
+    padding:6px 11px; cursor:pointer; line-height:1;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+    transition:transform .12s ease, background .12s ease, box-shadow .12s ease;
+  }
+  .notes-tool-btn:hover{ background:#fff3c4; transform:translateY(-1px); }
+  .notes-tool-btn:active{ transform:translateY(0); }
+  .notes-tool-btn.hl-btn{ background:#ffe066; }
+  .notes-tool-btn.clear-btn{ background:rgba(255,255,255,.65); font-weight:600; }
+  .notes-area{
+    width:100%; min-height:220px; max-height:520px; overflow-y:auto; resize:vertical;
+    box-sizing:border-box; background:#fffbe6; border:2px solid #ffd23f; border-radius:12px;
+    padding:16px 18px; font-family:'Inter',sans-serif; line-height:1.6; color:#3a2c05;
+    box-shadow:0 8px 22px rgba(255,193,60,.28), inset 0 1px 0 rgba(255,255,255,.7);
+  }
+  .notes-area:focus{ outline:none; border-color:#ffb700; box-shadow:0 0 0 3px rgba(255,193,60,.4); }
+  .notes-area:empty:before{ content:attr(data-placeholder); color:#a98a2e; pointer-events:none; }
+  .notes-save-hint{ font-size:10.5px; color:#a89b78; margin-top:6px; }
+
+  /* ---- notes modal (OneNote-style, large + resizable editor) ---- */
+  .notes-modal-backdrop{
+    position:fixed; inset:0; background:rgba(10,8,4,.55); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+    display:none; align-items:center; justify-content:center; z-index:500; padding:24px;
+  }
+  .notes-modal-backdrop.open{ display:flex; }
+  .notes-modal{
+    width:82vw; height:82vh; min-width:680px; min-height:480px; max-width:97vw; max-height:95vh;
+    background:#ffffff; color:#1f1f1f; border-radius:10px; border:1px solid #d7d7d7;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+    display:flex; flex-direction:column; overflow:hidden;
+    animation: cardIn .25s cubic-bezier(.16,1,.3,1);
+    font-family:'Inter',sans-serif;
+    resize:both;
+  }
+  @media (max-width:900px){ .notes-modal{ width:96vw; height:92vh; min-width:0; resize:none; } }
+
+  /* ribbon */
+  .onenote-ribbon{
+    display:flex; align-items:flex-start; gap:0; padding:10px 10px 0; background:#fff;
+    border-bottom:1px solid #e3e3e3; flex:none; overflow-x:auto;
+  }
+  .ribbon-group{ display:flex; flex-direction:column; align-items:center; padding:0 10px; flex:none; }
+  .ribbon-group-row{ display:flex; gap:2px; align-items:center; }
+  .ribbon-stack{ display:flex; flex-direction:column; align-items:stretch; gap:1px; }
+  .ribbon-label{ font-size:10.5px; color:#767676; margin-top:auto; padding-top:6px; padding-bottom:2px; white-space:nowrap; }
+  .ribbon-sep{ width:1px; align-self:stretch; background:#e3e3e3; margin:2px 6px 18px; flex:none; }
+  .ribbon-btn{
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    background:none; border:none; cursor:pointer; padding:5px 9px; border-radius:4px;
+    font-family:'Inter',sans-serif; font-size:11px; color:#333; line-height:1.1;
+  }
+  .ribbon-btn:hover{ background:#f1f1f1; }
+  .ribbon-btn.active-style{ background:#e6f0fa; }
+  .ribbon-icon{ font-size:18px; }
+  .ribbon-line-btn{
+    display:flex; align-items:center; gap:6px; background:none; border:none; cursor:pointer;
+    font-size:12px; color:#333; padding:3px 8px; border-radius:4px; text-align:left; white-space:nowrap;
+  }
+  .ribbon-line-btn:hover{ background:#f1f1f1; }
+  .ribbon-close-wrap{ margin-left:auto; display:flex; align-items:flex-start; padding:2px 6px 0; flex:none; }
+  .notes-modal-close{
+    flex:none; width:30px; height:30px; border-radius:50%; border:1px solid #dcdcdc;
+    background:#fafafa; color:#444; font-size:14px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .notes-modal-close:hover{ background:#eee; transform:rotate(90deg); }
+
+  /* section tabs */
+  .onenote-tabs{
+    display:flex; align-items:flex-end; gap:6px; padding:10px 16px 0; background:#f4f4f4;
+    border-bottom:3px solid var(--tab-accent,#c0525b); flex:none; overflow-x:auto;
+  }
+  .onenote-notebook{
+    display:flex; align-items:center; gap:6px; font-family:'Inter',sans-serif; font-weight:600; font-size:13px;
+    color:#333; padding:8px 10px 10px; white-space:nowrap;
+  }
+  .onenote-tab{
+    padding:8px 16px; border-radius:8px 8px 0 0; font-size:12.5px; font-weight:600; color:#4a4a4a;
+    white-space:nowrap; background:#e4e4e4;
+  }
+  .onenote-tab.active{ background:#fff; color:#1f1f1f; }
+
+  /* page body */
+  .notes-modal-body{ flex:1; min-height:0; padding:30px 46px 12px; overflow-y:auto; background:#fff; display:block; }
+  .onenote-page-title{
+    font-family:'Inter',sans-serif; font-weight:300; font-size:38px; color:#1f1f1f;
+    border-bottom:1px solid #cfcfcf; padding-bottom:12px; margin-bottom:6px; line-height:1.15;
+  }
+  .onenote-page-meta{ display:flex; gap:22px; font-size:12.5px; color:#8a8a8a; margin-bottom:26px; }
+  .notes-modal-body .notes-area{
+    flex:none; width:100%; min-height:340px; max-height:none; resize:none;
+    background:#fff; border:none; border-radius:0; box-shadow:none; padding:0;
+    color:#1f1f1f; font-size:16px; line-height:1.75;
+  }
+  .notes-modal-body .notes-area:focus{ outline:none; box-shadow:none; border-color:transparent; }
+  .notes-modal-body .notes-area:empty:before{ color:#a3a3a3; }
+  .notes-modal-body .notes-area ul, .notes-modal-body .notes-area ol{ padding-left:26px; margin:8px 0; }
+  .notes-modal-body .notes-area li{ margin:4px 0; }
+  .notes-modal-body .note-code-block{
+    background:#1e1e1e; color:#d4d4d4; font-family:'Consolas','Menlo','Monaco',monospace; font-size:13.5px;
+    line-height:1.55; padding:14px 16px; border-radius:8px; overflow-x:auto; margin:14px 0;
+    white-space:pre; tab-size:4;
+  }
+  .notes-modal-body .note-code-block code{ background:none; color:inherit; font-family:inherit; white-space:inherit; }
+
+  .notes-modal-footer{
+    display:flex; align-items:center; justify-content:space-between; gap:12px; flex:none;
+    padding:12px 22px 16px; background:#fff; border-top:1px solid #eee;
+  }
+  .notes-save-btn{
+    background:#2b6cb0; color:#fff; border:1px solid #2b6cb0;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:13px; letter-spacing:.2px;
+    padding:9px 22px; border-radius:6px; cursor:pointer;
+    transition:transform .15s ease, filter .15s ease, background .15s ease;
+  }
+  .notes-save-btn:hover{ transform:translateY(-1px); filter:brightness(1.08); }
+  .notes-save-btn:active{ transform:translateY(0); }
+  .notes-save-btn.saved{ background:#3f9142; border-color:#3f9142; }
+  .notes-save-hint{ color:#9a9a9a; }
+
+  footer.foot{ text-align:center; padding:26px; font-size:12px; color:var(--ink-faint); }
+
+  /* ---- auth gate ---- */
+  .auth-gate{
+    position:fixed; inset:0; z-index:1000; background:linear-gradient(160deg,#1c2b3a,#0f1720);
+    display:none; align-items:center; justify-content:center; padding:24px; overflow-y:auto;
+  }
+  .auth-gate.open{ display:flex; }
+  .auth-card{
+    width:100%; max-width:380px; background:var(--card-alt); color:var(--ink);
+    border-radius:var(--radius); padding:28px 26px; box-shadow:0 30px 80px rgba(0,0,0,.5);
+    animation: cardIn .25s cubic-bezier(.16,1,.3,1); margin:auto;
+  }
+  .auth-brand{ display:flex; align-items:center; gap:8px; font-weight:700; font-size:14px; color:var(--ink-soft); margin-bottom:14px; }
+  .auth-card h2{ margin:0 0 6px; font-size:22px; font-family:'Fraunces',serif; }
+  .auth-sub{ margin:0 0 18px; font-size:13px; color:var(--ink-soft); line-height:1.5; }
+  .auth-label{ display:block; font-size:11.5px; font-weight:600; color:var(--ink-soft); margin:12px 0 4px; }
+  .auth-input{
+    width:100%; padding:10px 12px; border-radius:8px; border:1px solid var(--line);
+    font-family:'Inter',sans-serif; font-size:14px; background:#fff; color:var(--ink);
+  }
+  .auth-input:focus{ outline:2px solid var(--gold); outline-offset:1px; }
+  .auth-error{ color:#b3362c; font-size:12.5px; margin-top:8px; min-height:1px; display:none; }
+  .auth-primary-btn{
+    width:100%; margin-top:16px; padding:11px; border-radius:8px; border:none; cursor:pointer;
+    background:linear-gradient(135deg,#ffd23f,#ff9f1c); color:#3a2c05; font-weight:800; font-size:14px;
+  }
+  .auth-primary-btn:disabled{ opacity:.6; cursor:default; }
+  .auth-link-btn{
+    width:100%; margin-top:10px; padding:6px; border:none; background:none; cursor:pointer;
+    color:var(--gold-deep); font-size:12.5px; font-weight:600;
+  }
+  .auth-divider{ display:flex; align-items:center; gap:10px; margin:18px 0; color:var(--ink-faint); font-size:11.5px; }
+  .auth-divider::before, .auth-divider::after{ content:''; flex:1; height:1px; background:var(--line); }
+  .auth-google-btn{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:10px; border-radius:8px; border:1px solid var(--line); background:#fff; cursor:pointer;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:13.5px; color:var(--ink);
+  }
+  .auth-google-btn:disabled{ opacity:.6; cursor:default; }
+  .auth-guest-btn{
+    width:100%; margin-top:10px; padding:10px; border-radius:8px; border:1px dashed var(--line);
+    background:none; cursor:pointer; font-size:13px; color:var(--ink-soft); font-weight:600;
+  }
+  .auth-guest-btn:disabled{ opacity:.6; cursor:default; }
+  .auth-fine{ margin:14px 0 0; font-size:11px; color:var(--ink-faint); line-height:1.5; }
+
+  /* ---- account box (navbar) ---- */
+  .account-box{ display:flex; align-items:center; gap:10px; }
+  .account-email{ font-size:12.5px; color:#cfd8e0; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .account-signout{
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); color:#f2ede0;
+    font-size:12px; font-weight:600; padding:6px 12px; border-radius:999px; cursor:pointer;
+  }
+  .account-signout:hover{ background:rgba(255,255,255,.2); }
+
+</style>
+</head>
+<body>
+<div class="auth-gate open" id="authGate">
+  <div class="auth-card">
+    <div class="auth-brand">📜 <span>Chronicler</span></div>
+    <h2 id="authTitle">Welcome back</h2>
+    <p class="auth-sub">Sign in to save your progress and notes to the cloud, so they follow you across every device.</p>
+    <div id="authForm" data-mode="signin">
+      <label class="auth-label">Email</label>
+      <input type="email" id="authEmail" class="auth-input" placeholder="you@example.com" autocomplete="email">
+      <label class="auth-label">Password</label>
+      <input type="password" id="authPassword" class="auth-input" placeholder="••••••••" autocomplete="current-password">
+      <div class="auth-error" id="authError"></div>
+      <button class="auth-primary-btn" id="authSubmitBtn" type="button">Sign in</button>
+      <button class="auth-link-btn" id="authToggleMode" type="button">Need an account? Sign up</button>
+    </div>
+    <div class="auth-divider"><span>or</span></div>
+    <button class="auth-google-btn" id="authGoogleBtn" type="button">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.61z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.19l-2.92-2.26c-.81.55-1.85.87-3.04.87-2.34 0-4.32-1.58-5.03-3.71H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.71a5.4 5.4 0 0 1 0-3.42V4.96H.96a9 9 0 0 0 0 8.08l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.96l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </button>
+    <button class="auth-guest-btn" id="authGuestBtn" type="button">Continue as guest</button>
+    <p class="auth-fine">Guest sessions still save to the cloud, but won't follow you to a new browser. Sign in with email or Google to sync everywhere.</p>
+  </div>
+</div>
+
+
+<header class="navbar">
+  <div class="brand">
+    <div class="brand-mark">📜</div>
+    <div class="brand-name"><span class="bn-soft">Chroni</span><span class="bn-one">cl</span><span class="bn-stop">er</span></div>
+  </div>
+  <a class="nav-link" href="#" onclick="return false;">Home</a>
+  <div class="account-box" id="accountBox" style="display:none;">
+    <span class="account-email" id="accountEmail"></span>
+    <button class="account-signout" id="signOutBtn" type="button">Sign out</button>
+  </div>
+</header>
+
+<div class="shell">
+
+  <div class="eyebrow">EXPLORE ERAS</div>
+  <div class="track-tabs">
+    <button class="track-tab active" data-track="history" onclick="selectTrack('history')">Indian &amp; World History</button>
+  </div>
+
+  <div class="hero-row">
+    <div>
+      <h1>Your syllabus, <em>mapped.</em></h1>
+      <p class="hero-sub">Follow the trail from prehistory to the present. Every stop has a ready-to-paste Claude study prompt behind it — no other source required.</p>
+    </div>
+    <div class="hero-actions">
+      <div class="legend-wrap">
+        <button class="pill-btn" onclick="toggleLegend()">🎨 Legend</button>
+        <div class="legend-pop" id="legendPop">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-ancient)"></span> Ancient</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-medieval)"></span> Medieval</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-modern)"></span> Modern</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-postindep)"></span> Post-Independence</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-worldhist)"></span> World History</div>
+        </div>
+      </div>
+      <button class="pill-btn" onclick="resetProgress()">↺ Reset</button>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- COLUMN 1: TRAIL -->
+    <div class="card" id="trailCard">
+      <div class="trail-head">
+        <div class="trail-icon" id="trailIcon">📜</div>
+        <div>
+          <div class="trail-title" id="trailTitleText">History trail</div>
+          <div class="trail-meta" id="trailMeta">63 WAYPOINTS · ONE MAP</div>
+        </div>
+      </div>
+      <input class="search-input" id="searchInput" type="text" placeholder="Find a waypoint…" oninput="renderTrail()">
+      <div class="chip-row" id="chipRow"></div>
+      <div id="groupList"></div>
+    </div>
+
+    <!-- COLUMN 2: SUBTOPICS -->
+    <div class="card card-alt" id="subCard">
+      <div class="sub-head">
+        <div class="sub-head-title" id="subHeadTitle">SUBTOPICS</div>
+        <div class="sub-progress" id="subProgress"></div>
+      </div>
+      <div id="subList"></div>
+    </div>
+
+    <!-- COLUMN 3: DETAIL -->
+    <div class="detail" id="detailPanel"></div>
+
+  </div>
+</div>
+
+<!-- NOTES MODAL (OneNote-style) -->
+<div class="notes-modal-backdrop" id="notesBackdrop" onclick="if(event.target===this) closeNotes()">
+  <div class="notes-modal">
+
+    <!-- Ribbon -->
+    <div class="onenote-ribbon">
+      <div class="ribbon-group">
+        <div class="ribbon-group-row">
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('paste')" title="Paste">
+            <span class="ribbon-icon">📋</span><span>Paste</span>
+          </button>
+          <div class="ribbon-stack">
+            <button type="button" class="ribbon-line-btn" onmousedown="event.preventDefault()" onclick="formatNote('cut')" title="Cut">✂️ Cut</button>
+            <button type="button" class="ribbon-line-btn" onmousedown="event.preventDefault()" onclick="formatNote('copy')" title="Copy">📄 Copy</button>
+            <button type="button" class="ribbon-line-btn" onmousedown="event.preventDefault()" onclick="formatNote('removeFormat')" title="Format Painter / Clear">🖌️ Format Painter</button>
+          </div>
+        </div>
+        <div class="ribbon-label">Clipboard</div>
+      </div>
+
+      <div class="ribbon-sep"></div>
+
+      <div class="ribbon-group">
+        <div class="ribbon-group-row">
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('bold')" title="Bold"><b>B</b></button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('italic')" title="Italic"><i>I</i></button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('underline')" title="Underline"><u>U</u></button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('strikeThrough')" title="Strikethrough"><s>ab</s></button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('highlight')" title="Highlight">🖍️</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('insertUnorderedList')" title="Bulleted list">• ≡</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('insertOrderedList')" title="Numbered list">1.≡</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="changeNoteFontSize(-1)" title="Smaller text">A−</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="changeNoteFontSize(1)" title="Larger text">A+</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('removeFormat')" title="Clear formatting">A<span style="color:#c0392b">✕</span></button>
+        </div>
+        <div class="ribbon-label">Basic Text</div>
+      </div>
+
+      <div class="ribbon-sep"></div>
+
+      <div class="ribbon-group">
+        <div class="ribbon-group-row">
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="setNoteHeading('H1')" title="Heading 1" style="font-size:14px;color:#2b6cb0;font-weight:700;">H1</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="setNoteHeading('H2')" title="Heading 2" style="font-size:13px;color:#2b6cb0;font-weight:700;">H2</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="setNoteHeading('P')" title="Paragraph" style="font-size:12px;">¶</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="insertCodeBlock()" title="Format selected text as a highlighted code block" style="font-family:monospace;font-size:12px;">&lt;/&gt;</button>
+        </div>
+        <div class="ribbon-label">Styles</div>
+      </div>
+
+      <div class="ribbon-close-wrap">
+        <button class="notes-modal-close" onclick="closeNotes()" title="Close">✕</button>
+      </div>
+    </div>
+
+    <!-- Section tabs -->
+    <div class="onenote-tabs" id="notesTabsBar">
+      <div class="onenote-notebook" id="notesNotebook">📓 <span id="notesNotebookName">Notebook</span></div>
+      <div class="onenote-tab" id="notesTabCrumb"></div>
+      <div class="onenote-tab active" id="notesTabActive"></div>
+    </div>
+
+    <!-- Page -->
+    <div class="notes-modal-body">
+      <div class="onenote-page-title" id="notesTitle"></div>
+      <div class="onenote-page-meta">
+        <span id="notesDate"></span>
+        <span id="notesTime"></span>
+      </div>
+      <div id="notesArea" class="notes-area" contenteditable="true" spellcheck="true"
+        data-placeholder="Type your notes here… saved automatically."
+        oninput="onNoteInput(this)" onpaste="handleNotePaste(event)"></div>
+    </div>
+
+    <div class="notes-modal-footer">
+      <div class="notes-save-hint">💾 Saved locally in this browser only.</div>
+      <button class="notes-save-btn" id="notesSaveBtn" onclick="manualSaveNotes()">Save</button>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">Built for self-paced UPSC History revision — progress saves automatically on this device.</footer>
+
+<script>
+/* ---------------------------------------------------------------
+   DATA
+--------------------------------------------------------------- */
+const topics = [
+  { id:1, era:'ancient', icon:'🪨', title:`Pre Historic Cultures in India`, group:'ancient',
+    blurb:`The earliest human activity on the subcontinent, from stone-tool cultures to the beginning of agriculture.`,
+    subtopics:[
+      {name:`Sources of Pre History`, context:`Archaeological sites, artefacts and dating methods used to reconstruct prehistoric India.`},
+      {name:`Periodization of Indian Pre History`, context:`How historians divide pre-history into cultural and technological phases.`},
+      {name:`Stone Age (overview)`, context:`Overview of the broad Stone Age era in the Indian context.`},
+      {name:`Palaeolithic (2 million BC – 10,000 BC)`, context:`Earliest human occupation; chopper-chopping and hand-axe industries.`},
+      {name:`Mesolithic (10,000 BC – 8,000 BC)`, context:`Microlithic tools, hunting-gathering and early rock art.`},
+      {name:`Neolithic (8000 BC – 4000 BC)`, context:`Beginnings of settled life, agriculture and animal domestication.`},
+      {name:`Chalcolithic Age (4000 BC – 1500 BC)`, context:`Copper-stone age, regional Chalcolithic cultures and rural settlements.`},
+      {name:`Iron Age (1500 BC – 200 BC)`, context:`Spread of iron technology and its social consequences.`},
+      {name:`Impact of Iron`, context:`How iron tools transformed agriculture, warfare and state formation.`}
+    ]},
+  { id:2, era:'ancient', icon:'🌾', title:`Pastoral & Farming Communities`, group:'ancient',
+    blurb:`Transition from nomadic life to settled agriculture across different ecological zones of India.`,
+    subtopics:[
+      {name:`Neolithic Phase`, context:`Early farming villages, polished stone tools and cattle herding.`},
+      {name:`Chalcolithic Phase`, context:`Copper-using farming cultures: Ahar-Banas, Malwa, Jorwe traditions.`},
+      {name:`Early Iron Phase`, context:`PGW and NBPW cultures; agricultural expansion with iron ploughs.`},
+      {name:`Geographical Distribution and Characteristics`, context:`Regional distribution of pastoral-farming cultures across the subcontinent.`}
+    ]},
+  { id:3, era:'ancient', icon:'🏙️', title:`Indus Valley Civilization`, group:'ancient',
+    blurb:`One of the world's earliest urban civilizations, flourishing along the Indus and Ghaggar-Hakra rivers.`,
+    subtopics:[
+      {name:`Harappan Civilisation or Indus Valley Civilisation`, context:`Origins, extent and phases of the mature Harappan culture.`},
+      {name:`Major Cities Town Planning`, context:`Grid layout, drainage systems of Mohenjo-daro, Harappa, Dholavira.`},
+      {name:`Harappan Internal & Foreign Trade`, context:`Trade networks with Mesopotamia, Persian Gulf and interior India.`},
+      {name:`Agriculture`, context:`Crops cultivated, irrigation evidence and agricultural technology.`},
+      {name:`Domestication of Animals`, context:`Animals kept and their roles in the Harappan economy.`},
+      {name:`Crafts`, context:`Pottery, bead-making, shell-working and metallurgy.`},
+      {name:`Weights and Measures`, context:`Standardised weight system and its implications for trade.`},
+      {name:`Script and Language`, context:`The undeciphered Harappan script and debates around it.`},
+      {name:`Harappan Society`, context:`Social organisation, evidence of hierarchy and town structure.`},
+      {name:`Harappan Religion`, context:`Mother goddess, proto-Shiva, fire altars and ritual objects.`},
+      {name:`Harappan Economy`, context:`Surplus production, craft specialisation and trade economy.`},
+      {name:`Harappan Burial System`, context:`Burial practices and what they reveal about belief systems.`},
+      {name:`Harappan Art & Architecture`, context:`Figurines, seals, public buildings and aesthetic traditions.`},
+      {name:`Decline of Harappan Culture`, context:`Theories: climate change, floods, Aryan invasion, internal decay.`}
+    ]},
+  { id:4, era:'ancient', icon:'📿', title:`Vedic Society`, group:'ancient',
+    blurb:`The Aryan-speaking cultures of the Vedic age and their religious, social and political institutions.`,
+    subtopics:[
+      {name:`Original Home of Aryans`, context:`Debates on Central Asian, Arctic and South Asian origin theories.`},
+      {name:`Features of Aryan Culture`, context:`Pastoral economy, cattle wealth, tribal organisation and soma ritual.`},
+      {name:`Vedic Texts & Upanishad`, context:`The four Vedas, Brahmanas, Aranyakas and Upanishadic philosophy.`},
+      {name:`Sources for Reconstructing Vedic Society and Culture`, context:`How historians use texts, archaeology and linguistics.`},
+      {name:`Geography of the Rig Vedic Period & Later Vedic Phases`, context:`Rivers, regions and expansion from the Punjab to the Gangetic plain.`},
+      {name:`Economic Conditions`, context:`From pastoral to agrarian economy; growth of trade and crafts.`},
+      {name:`Political Organisation and Evolution of Monarchy`, context:`Tribal polity, janapadas, rajas and the Ashvamedha.`},
+      {name:`Social Organisation and Varna System`, context:`Emergence of the four varnas and caste stratification.`},
+      {name:`Religion and Thought`, context:`Nature worship, yajnas, Upanishadic monism and early heterodoxy.`}
+    ]},
+  { id:5, era:'ancient', icon:'🏺', title:`Pre Mauryan Period`, group:'ancient',
+    blurb:`The mahajanapada age: rise of cities, republics, coinage and the heterodox religious movements.`,
+    subtopics:[
+      {name:`Age of 2nd Urbanisation`, context:`Second urbanisation in the Gangetic plain and causes behind it.`},
+      {name:`Formation of States`, context:`How jana-padas crystallised into territorial kingdoms.`},
+      {name:`The Sixteen Mahajanapadas`, context:`Location, power and eventual rise of Magadha.`},
+      {name:`Gana Sangha or Republics`, context:`Vajjian confederacy, Licchhavis and the republican tradition.`},
+      {name:`Rise of Urban Centres`, context:`Pataliputra, Varanasi, Ujjain: commerce, crafts and culture.`},
+      {name:`Evolution of Coins`, context:`Punch-marked coins, their designs and economic significance.`},
+      {name:`Haryanka Dynasty`, context:`Bimbisara, Ajatashatru and the early growth of Magadha.`},
+      {name:`Shishunaga Dynasty`, context:`Consolidation of Magadha and rivalry with Avanti.`},
+      {name:`Nanda Dynasty`, context:`Mahapadma Nanda, the vast army and Alexander's invasion context.`}
+    ]},
+  { id:6, era:'ancient', icon:'☸️', title:`Growth of Jainism & Buddhism`, group:'ancient',
+    blurb:`The two great heterodox movements that reshaped Indian religious and social life.`,
+    subtopics:[
+      {name:`Jainism`, context:`Mahavira, the Tirthankaras, Anekantavada, Ahimsa and Jain sects.`},
+      {name:`Buddhism`, context:`Siddhartha Gautama, Four Noble Truths, Eightfold Path, Sangha and Buddhist councils.`}
+    ]},
+  { id:7, era:'ancient', icon:'🦁', title:`The Mauryan Empire`, group:'ancient',
+    blurb:`India's first pan-subcontinental empire, united by Chandragupta and guided by Kautilya's statecraft.`,
+    subtopics:[
+      {name:`Chandragupta and Bindusara`, context:`Founding of the empire, Seleucid war, Bindusara's expansion southward.`},
+      {name:`The Arthasastra`, context:`Kautilya's manual on governance, economy, espionage and statecraft.`},
+      {name:`Megasthenes`, context:`The Greek ambassador's Indica and its description of Mauryan society.`},
+      {name:`Ashoka and His Successors`, context:`Kalinga war, Dhamma policy and the post-Ashokan decline.`},
+      {name:`Ashoka's Inscriptions and Sites`, context:`Pillars, rock edicts, minor rock edicts and their geographical spread.`},
+      {name:`Ashoka's Dhamma`, context:`Principles of Dhamma: tolerance, welfare, non-violence, respect.`},
+      {name:`Mauryan Administration, Economy, Society and Art`, context:`Centralised bureaucracy, taxation, trade routes and Mauryan sculpture.`},
+      {name:`Decline of Maurya`, context:`Brahmanical reaction, Pushyamitra Shunga and fiscal strain theories.`},
+      {name:`Cultural History during the Maurya Age`, context:`Pataliputra palace, Sanchi beginnings, terracottas and ring wells.`}
+    ]},
+  { id:8, era:'ancient', icon:'🪙', title:`Post-Mauryan India (BC 200–AD 300)`, group:'ancient',
+    blurb:`An era of foreign invaders, trading networks and vibrant regional art schools.`,
+    subtopics:[
+      {name:`Arrival of Indo-Greeks, Shakas, Parthians & Kushana`, context:`Northwest invasions, bilingual coins and Gandhara art.`},
+      {name:`Commercial Contacts with the Outside World`, context:`Silk Road, Roman trade, monsoon routes and luxury goods.`},
+      {name:`Satavahanas and Other Indigenous Dynasties`, context:`Deccan power, lead coins, Amaravati sculpture and Prakrit literature.`},
+      {name:`Society: Evolution of Jatis`, context:`Proliferation of jatis alongside the classical varna model.`},
+      {name:`Sangam Texts and Society`, context:`Tamil Sangam poetry as a source for south Indian social history.`},
+      {name:`Schools of Art: Gandhara, Mathura, Amravati`, context:`Three great art schools: Hellenistic, indigenous and Deccan traditions.`}
+    ]},
+  { id:9, era:'ancient', icon:'⚜️', title:`Imperial Guptas`, group:'ancient',
+    blurb:`The Golden Age of India: Sanskrit literature, mathematics, astronomy and fine arts at their peak.`,
+    subtopics:[
+      {name:`Sources of Gupta Rule`, context:`Inscriptions, coins, Puranas and Chinese pilgrim accounts.`},
+      {name:`Political History of Guptas`, context:`Chandragupta I, Samudragupta, Chandragupta II and the successors.`},
+      {name:`Fa-hien Arrival`, context:`Chinese Buddhist pilgrim's account of Gupta administration and society.`},
+      {name:`Gupta Administration`, context:`Provincial, district and village administration; bureaucracy and feudalism.`},
+      {name:`Development of Art & Culture`, context:`Ajanta frescoes, Sarnath Buddha, Kalidasa and classical Sanskrit.`},
+      {name:`Gupta Empire: Period of Golden Age`, context:`Scientific achievements: Aryabhata, Varahamihira, Sushruta traditions.`},
+      {name:`Economic Conditions`, context:`Guild system, overseas trade, coinage and agrarian expansion.`},
+      {name:`Urban Centres in Gupta Period`, context:`Pataliputra, Varanasi, Ujjain and the role of urban guilds.`},
+      {name:`Societal Changes during Gupta Period`, context:`Brahmanical revival, decline of women's status and untouchability.`}
+    ]},
+  { id:10, era:'ancient', icon:'🕊️', title:`Harshavardana`, group:'ancient',
+    blurb:`The last great northern Indian emperor before the age of regional kingdoms.`,
+    subtopics:[
+      {name:`Sources for Harsha's Period`, context:`Bana's Harshacharita, Xuanzang's account and inscriptions.`},
+      {name:`Early Life of Harsha`, context:`Maukhari connection, succession crisis and early campaigns.`},
+      {name:`Harsha's Administration`, context:`Revenue, army, judicial system and welfare measures.`},
+      {name:`Important Officials of the Empire`, context:`Mahasandhivigrahika, Amatya, Kumaramatyas and local chiefs.`},
+      {name:`Economy under Harsha`, context:`Land grants, trade routes and the role of guilds.`},
+      {name:`Huen Tsang Arrival`, context:`Xuanzang's observations on society, religion and urban life.`},
+      {name:`Society`, context:`Caste, women's position, Buddhist monasteries and social welfare.`},
+      {name:`Religion`, context:`Harsha's religious tolerance; patronage of Buddhism and Shaivism.`}
+    ]},
+  { id:11, era:'ancient', icon:'🌏', title:`India's Contacts with Rest of Asia`, group:'ancient',
+    blurb:`How India influenced and was influenced by Central Asia, Southeast Asia, Rome and China.`,
+    subtopics:[
+      {name:`Propagation of Buddhism Abroad`, context:`Spread of Buddhism to Sri Lanka, Central Asia, China and SE Asia.`},
+      {name:`India's Contacts with Roman Empire`, context:`Pepper, ivory, spices trade; Roman gold drain and amphitheatres.`},
+      {name:`Trade and Chinese Silk Route`, context:`India's position on the Silk Road and cultural exchanges.`},
+      {name:`Reign of Kanishka`, context:`Kushana empire, Gandhara art and the Fourth Buddhist Council.`},
+      {name:`Spread of Indian Culture to SE Asia`, context:`Indianisation: Hindu-Buddhist kingdoms in Indonesia, Cambodia, Vietnam.`}
+    ]},
+  { id:12, era:'ancient', icon:'🎭', title:`Sangam Period (South Indian Dynasties)`, group:'ancient',
+    blurb:`The classical age of Tamil literature and the three kingdoms of the far south.`,
+    subtopics:[
+      {name:`Sangam Literature`, context:`The eight anthologies and ten idylls: themes, authors and dating.`},
+      {name:`South Indian Dynasties – Cholas`, context:`Early Cholas: Uraiyur, Kaveripattinam and maritime power.`},
+      {name:`South Indian Dynasties – Cheras`, context:`Kerala coast, Musiri port and the Chera relationship with Rome.`},
+      {name:`South Indian Dynasties – Pandyas`, context:`Madurai kingdom, pearls and Sangam patronage.`},
+      {name:`Sangam Polity, Society and Culture`, context:`Five landscapes (tinai), social classes, warrior code and women.`},
+      {name:`Economy of Sangam Period`, context:`Agriculture, pastoralism, trade guilds and ports.`},
+      {name:`Foreign Dynasties`, context:`Kalabhras: the 'dark age' between Sangam and medieval period.`},
+      {name:`Commercial Contacts with the Outside World`, context:`Roman and Arab trade; pepper, pearls, ivory and cotton.`},
+      {name:`Schools of Art`, context:`Pallava cave temples, early Dravidian rock-cut sculpture.`}
+    ]},
+  { id:13, era:'medieval', icon:'🏰', title:`Major Dynasties (750–1200) of Early Medieval India`, group:'medieval',
+    blurb:`The political landscape of early medieval India — Pratiharas, Palas, Rashtrakutas, Rajputs and the tripartite conflict.`,
+    subtopics:[
+      {name:`The Pratiharas (8th to 10th Century)`, context:`Gurjara-Pratiharas: rise from Rajasthan, conflict with Arabs and the tripartite struggle for Kanauj.`},
+      {name:`The Palas (8th to 11th Century)`, context:`Buddhist dynasty of Bengal and Bihar; patronage of Nalanda and Vikramashila universities.`},
+      {name:`The Tripartite Conflict`, context:`Three-way struggle between Pratiharas, Palas and Rashtrakutas for control of Kanauj.`},
+      {name:`The Senas (11th to 12th Century)`, context:`Brahmanical revival in Bengal; Lakshman Sena and the coming of Bakhtiyar Khilji.`},
+      {name:`The Rajaputas`, context:`Origin theories, clan structure, chivalric culture and political fragmentation of Rajput kingdoms.`},
+      {name:`Pallavas`, context:`Pallava art, Mahabalipuram, Kanchipuram and their long conflict with the Chalukyas.`},
+      {name:`Chalukyas`, context:`Badami, Eastern and Western Chalukyas; Pulakesi II vs Harsha; Chalukyan temple art.`},
+      {name:`Rashtrakutas`, context:`Deccan power, Ellora caves, Arab trade contacts and literary patronage.`},
+      {name:`Indian Feudalism`, context:`Debate on feudalism in early medieval India: Kosambi, R.S. Sharma, B.N.S. Yadava positions.`}
+    ]},
+  { id:14, era:'medieval', icon:'⛵', title:`Cholas and Other South Indian Kingdoms`, group:'medieval',
+    blurb:`Imperial Cholas at their zenith — naval power, temple architecture, administration and literary culture.`,
+    subtopics:[
+      {name:`Chola Rulers and Political History`, context:`From Vijayalaya to Rajendra I — the making of the Chola empire across South and Southeast Asia.`},
+      {name:`Chola Administration`, context:`Mandalam, Nadu, Ur and Sabha system; village self-governance; inscriptional evidence.`},
+      {name:`Socio-Economic Life`, context:`Temple economy, trade guilds (Ayyavole, Manigramam), agrarian structure under Cholas.`},
+      {name:`Education and Literature`, context:`Tamil Shaiva and Vaishnava literature, Kamban's Ramayana, Chola court patronage.`},
+      {name:`The Cheras (9th to 12th Century)`, context:`Later Cheras of Kerala, Cheraman Perumal tradition and trade with the Arab world.`},
+      {name:`The Yadavas (12th to 13th Century)`, context:`Devagiri-based Yadavas; Hemadri and administration; decline before Alauddin Khilji.`},
+      {name:`Contact with South-East Asia`, context:`Naval expeditions, Srivijaya campaign of Rajendra I, spread of Indian culture to SE Asia.`}
+    ]},
+  { id:15, era:'medieval', icon:'⚔️', title:`Early Muslim Invasions`, group:'medieval',
+    blurb:`Arab conquest of Sindh and the Ghaznavid and Ghurid invasions that reshaped north India.`,
+    subtopics:[
+      {name:`The Arab Conquest of Sindh`, context:`Muhammad bin Qasim, 712 AD, Chach Nama sources, impact on Sindh society and administration.`},
+      {name:`Mahmud of Ghazni`, context:`Seventeen raids, Somnath temple, Alberuni's Kitab-ul-Hind; economic motivation and political impact.`},
+      {name:`Muhammad Ghori`, context:`Battles of Tarain (1191, 1192), defeat of Prithviraj Chahamana, foundation of Turkish rule in India.`}
+    ]},
+  { id:16, era:'medieval', icon:'🏯', title:`The Delhi Sultanate (1206–1526 AD)`, group:'medieval',
+    blurb:`Five dynasties, 320 years — administration, economy, society and culture under the sultans of Delhi.`,
+    subtopics:[
+      {name:`Slave Dynasty`, context:`Qutbuddin Aibak, Iltutmish, Razia Sultana, Balban — building the Sultanate's foundations.`},
+      {name:`Khalji Dynasty (1290–1320 AD)`, context:`Alauddin Khilji — market reforms, agrarian policy, Deccan campaigns and Mongol repulsion.`},
+      {name:`Tughlaq Dynasty (1320–1414 AD)`, context:`Muhammad bin Tughlaq's experiments; Firuz Shah's welfare works; decline and Timur's invasion.`},
+      {name:`Provincial Resistance and Resistance by Indian Chiefs`, context:`Rajput resistance, Bengal autonomy, Bahmani kingdom and challenges to Delhi's central authority.`},
+      {name:`Sayyid Dynasty`, context:`Khizr Khan and successors; weak central authority; Timurid suzerainty over Delhi.`},
+      {name:`Lodi Dynasty`, context:`Bahlul Lodi, Sikandar Lodi — Afghan resurgence; Ibrahim Lodi and the eve of Babur's invasion.`},
+      {name:`Attacks by Mongols and other Turks`, context:`Mongol invasions under Hulagu, Timur's 1398 sack of Delhi — causes and consequences.`},
+      {name:`Administration`, context:`Iqta system, central and provincial administration, judiciary, Diwan-i-Wizarat and its departments.`},
+      {name:`Economy`, context:`Agriculture, taxation (kharaj, jizyah, khamsa), trade routes, markets and currency.`},
+      {name:`Urbanization`, context:`Growth of Delhi, rise of new towns, market towns and pilgrimage centres.`},
+      {name:`Society and Culture`, context:`Hindu-Muslim interaction, Sufi and Bhakti movements, syncretic culture of the Sultanate.`},
+      {name:`Scientific Knowledge and Legal System`, context:`Translation movement, Al-Biruni, Ziauddin Barani, Islamic jurisprudence in India.`},
+      {name:`Challenges leading to the decline of the Sultanate`, context:`Timur's invasion, regional kingdoms, Afghan nobility conflicts and the Lodis' failure.`}
+    ]},
+  { id:17, era:'medieval', icon:'🛕', title:`Vijayanagar Empire`, group:'medieval',
+    blurb:`The last great Hindu empire — a bulwark against the Bahmanis, patron of Telugu-Kannada culture.`,
+    subtopics:[
+      {name:`Sources`, context:`Foreign traveller accounts (Nuniz, Paes, Abdur Razzaq), inscriptions, Mackenzie manuscripts.`},
+      {name:`Political History`, context:`Four dynasties: Sangama, Saluva, Tuluva (Krishnadevaraya), Aravidu; Battle of Talikota 1565.`},
+      {name:`Administration`, context:`Nayankara system, Ayagars (village officers), revenue and military organisation.`},
+      {name:`Economy and Decline of Trade`, context:`Pepper and textile exports, horse trade, Portuguese connection; post-Talikota decline.`},
+      {name:`Society and Culture`, context:`Devadasi system, women's position, Telugu-Kannada literature, Carnatic music origins.`},
+      {name:`Economic Condition`, context:`Prosperous agrarian base, irrigation tanks, urban markets; temple as economic centre.`},
+      {name:`Conflicts with the Bahmani Kingdom`, context:`Five wars over Raichur Doab, Krishna-Godavari delta and Tungabhadra frontier.`},
+      {name:`Travellers of the Period 1200 AD to 1600 AD`, context:`Ibn Battuta, Marco Polo, Abdur Razzaq, Nicolo de Conti, Duarte Barbosa — their observations.`}
+    ]},
+  { id:18, era:'medieval', icon:'🌙', title:`Central Asian Politics & Babur's Advance to India`, group:'medieval',
+    blurb:`The Timurid world, Uzbek pressure and how Babur used India as his ultimate prize.`,
+    subtopics:[
+      {name:`The Timurids`, context:`Timur's legacy, Samarkand, Herat; Timurid renaissance and its influence on Babur's outlook.`},
+      {name:`The Timurid-Uzbek Conflict`, context:`Shaybani Khan's conquest of Samarkand; Babur's repeated losses and eastward exile.`},
+      {name:`Uzbek-Iran Conflict and Babur`, context:`Safavid-Uzbek rivalry; Babur's alliance with Shah Ismail; Shia-Sunni geopolitical dimension.`},
+      {name:`Babur's Advance towards India`, context:`Kabul as base, Punjab invasions and the invitation of Daulat Khan Lodi.`},
+      {name:`Battle of Panipat (1526) – Ibrahim Lodi vs Babur`, context:`First Battle of Panipat: artillery tactics, Babur's flanking movement, Lodi defeat and its significance.`},
+      {name:`Struggle with Rana Sanga — Battle of Khanwa (1527)`, context:`Babur's jihad declaration; Rajput coalition defeat; consolidation of Mughal power in north India.`},
+      {name:`Problems of the Eastern Areas and the Afghans`, context:`Afghan chiefs in Bihar and Bengal; Battle of Ghaghra (1529).`},
+      {name:`Babur's Contributions and Significance`, context:`Introduction of gunpowder warfare, Baburnama, gardens (char-bagh), architecture; historical significance.`}
+    ]},
+  { id:19, era:'medieval', icon:'🗡️', title:`Humayun, Sher Shah and the Afghan Interregnum`, group:'medieval',
+    blurb:`Humayun's turbulent reign, Sher Shah's administrative genius and the Afghan challenge to Mughal supremacy.`,
+    subtopics:[
+      {name:`Humayun and the Afghans — Battles of Chausa & Kanauj`, context:`Sher Khan's rise; battles of Chausa (1539) and Kanauj (1540); Humayun's exile to Persia.`},
+      {name:`Early Activities of Humayun — Bahadur Shah of Gujarat`, context:`Gujarat campaign, Malwa, Champaner; missed opportunity against Bahadur Shah.`},
+      {name:`Sher Shah's Early Life and Rise to Power`, context:`From Sasaram jagir to imperial ambition; service under Lodis and Bengali sultans.`},
+      {name:`The Sur Empire (1540–56) — Administration and Reforms`, context:`Grand Trunk Road, postal system, revenue reforms (zabti), standardised currency.`},
+      {name:`Contributions of Sher Shah`, context:`Administrative legacy inherited by Akbar; Rohtas Fort, Sher Mandal, coinage reform.`},
+      {name:`Humayun's Return and Restoration`, context:`Persian exile, Safavid help, reconquest of Kabul and Delhi; Second Battle of Panipat (1556) context.`}
+    ]},
+  { id:20, era:'medieval', icon:'👑', title:`Akbar — Consolidation, Expansion & Administration`, group:'medieval',
+    blurb:`Akbar's military campaigns, administrative genius, Rajput policy and the Mughal state at its most sophisticated.`,
+    subtopics:[
+      {name:`Second Battle of Panipat (1556) — Hemu`, context:`Bairam Khan's role, Hemu's defeat, consolidation of Mughal authority after Humayun's death.`},
+      {name:`Akbar's Assertion of Personal Authority — Regency End`, context:`Bairam Khan's dismissal, Maham Anga influence, Akbar's takeover of direct administration.`},
+      {name:`Early Expansion — Malwa, Garh-Katanga, Rajasthan, Gujarat, Bengal`, context:`Systematic annexation; Mewar resistance; Rana Pratap and Battle of Haldighati 1576.`},
+      {name:`Rajput Policy — Growth of a Composite Ruling Class`, context:`Marriage alliances, Rajput mansabdars, Todar Mal and emergence of the composite Mughal elite.`},
+      {name:`Northwest Expansion — Kabul, Kashmir, Sindh, Balochistan`, context:`Akbar's northwestern frontier strategy; Kabul secured; Afghanistan incorporated.`},
+      {name:`Akbar's Concept of Suzerainty — Sulh-i-Kul`, context:`Divine kingship, Infallibility Decree (1579), Din-i-Ilahi and the theory of universal sovereignty.`},
+      {name:`Mughal Administration — Central, Provincial, Local`, context:`Four central ministers; suba-sarkar-pargana-village structure; Faujdar, Amalguzar, Qanungo.`},
+      {name:`Land Revenue System — Dahsala & Mansabdari`, context:`Todar Mal's zabti/ain-i-dahsala; mansab ranks (zat, sawar); jagir vs cash payment.`},
+      {name:`Akbar's Religious Views — Ibadat Khana to Din-i-Ilahi`, context:`Interfaith debates, Mahzar of 1579, breach with ulama, abolition of jizyah (1564).`}
+    ]},
+  { id:21, era:'medieval', icon:'🏰', title:`The Deccan and the Mughals (up to 1657)`, group:'medieval',
+    blurb:`Mughal southward expansion from Akbar's overtures to Aurangzeb's wars as viceroy-prince in the Deccan.`,
+    subtopics:[
+      {name:`The Deccani States upto 1595`, context:`Bahmani successor states: Ahmadnagar, Bijapur, Golconda, Bidar, Berar — politics and culture.`},
+      {name:`Mughal Advance towards the Deccan — Akbar's Policy`, context:`Khandesh, Berar acquisition; Chand Bibi's resistance at Ahmadnagar.`},
+      {name:`Rise of Malik Ambar (1601–27)`, context:`Malik Ambar's Deccan statecraft, Maratha cavalry revival, guerrilla warfare against Mughals.`},
+      {name:`Shah Jahan's Deccan Campaigns (1636) — Annexation`, context:`Ahmadnagar annexed; Bijapur and Golconda accept Mughal suzerainty; terms and implications.`},
+      {name:`Shah Jahan and the Deccan (1636–57) — Aurangzeb as Viceroy`, context:`Deccan as viceroyalty; Aurangzeb's administration; Shivaji's early rise under Mughal suzerainty.`},
+      {name:`Cultural Contribution of the Deccani States`, context:`Deccani painting style, Urdu-Dakhni literature, Bijapur and Golconda architecture.`}
+    ]},
+  { id:22, era:'medieval', icon:'🎨', title:`India in the First Half of the 17th Century — Jahangir & Shah Jahan`, group:'medieval',
+    blurb:`Artistic golden age, Nur Jahan's political influence, court intrigues and Shah Jahan's architectural legacy.`,
+    subtopics:[
+      {name:`Jahangir's Accession and Early Difficulties`, context:`Khusrau rebellion, execution of Guru Arjan Dev, Sikh-Mughal tensions beginning.`},
+      {name:`Nur Jahan and the Junta`, context:`Nur Jahan's political dominance; the junta of Itimad-ud-Daula, Asaf Khan; faction politics.`},
+      {name:`Jahangir as a Ruler — Justice and Arts`, context:`Chain of justice, Mughal miniature painting's golden age; nature study in art.`},
+      {name:`Shah Jahan — Consolidation and Expansion`, context:`Rajput policy, Deccan, Balkh campaigns; Taj Mahal, Red Fort, Jama Masjid — architectural legacy.`},
+      {name:`Mughal Foreign Policy — Qandahar and Central Asia`, context:`Qandahar as contested frontier — seven Mughal-Safavid wars; Balkh disaster 1646–47.`},
+      {name:`Evolution of Mughal Ruling Class and Jagirdari Crisis`, context:`Expansion of Rajput, Deccani nobles; growing jagirdari crisis under Shah Jahan.`},
+      {name:`State and Religion under Jahangir and Shah Jahan`, context:`Jahangir's eclecticism; Shah Jahan's Sunni tilt; relations with Sufis and Hindus.`}
+    ]},
+  { id:23, era:'medieval', icon:'🕌', title:`Aurangzeb — Policies, Wars and Imperial Crisis`, group:'medieval',
+    blurb:`Aurangzeb's orthodox Sunni policies, Rajput and Deccan wars, popular revolts and the structural decline of the empire.`,
+    subtopics:[
+      {name:`War of Succession (1657–58)`, context:`Four-prince war; battles of Dharmat, Samugarh; Dara Shikoh's defeat and execution.`},
+      {name:`Religious Policy — Two Phases`, context:`Phase 1 (gradual); Phase 2 (1679–): reimposition of jizyah, temple demolitions and political context.`},
+      {name:`Puritanical Reforms`, context:`Muhtasib (censor), ban on music/dance, removal of innovations from Mughal court ceremonial.`},
+      {name:`Rajput Wars — Breach with Marwar and Mewar`, context:`Jodhpur succession crisis, Durgadas Rathore's resistance; Mewar war; consequences for empire.`},
+      {name:`Popular Revolts — Jats, Satnamis, Afghans, Sikhs`, context:`Jat revolt (Gokula, Raja Ram), Satnami uprising, Guru Tegh Bahadur's execution, Sikh resistance.`},
+      {name:`Rise of Shivaji and Treaty of Purandar`, context:`Shivaji's early career, Torna-Rajgarh forts, sack of Surat; Jai Singh's campaign; Purandar 1665.`},
+      {name:`Shivaji's Swarajya — Administration and Achievements`, context:`Ashtapradhan, land revenue (chauth, sardeshmukhi), navy, Rajyabhishek (coronation) 1674.`},
+      {name:`Deccan Quagmire — Bijapur, Golconda, and Marathas`, context:`Annexation of Bijapur (1686) and Golconda (1687); Marathas under Sambhaji, Rajaram, Tarabai.`},
+      {name:`Assessment of Aurangzeb and Jagirdari Crisis`, context:`Historiographical debate (Jadunath Sarkar vs Irfan Habib); jagirdari crisis as structural cause of decline.`}
+    ]},
+  { id:24, era:'medieval', icon:'🏘️', title:`Society — Structure and Growth`, group:'medieval',
+    blurb:`Medieval Indian social fabric — rural society, artisans, women, nobility, slavery and commercial classes.`,
+    subtopics:[
+      {name:`Rural Society`, context:`Peasant communities, zamindars, revenue demands; condition of cultivators under Sultans and Mughals.`},
+      {name:`Towns and Town Life`, context:`Shahrs and qasbas; artisan quarters; role of merchants, moneylenders and sarrafs.`},
+      {name:`Artisans and Master-Craftsmen`, context:`Textile production, craft guilds, imperial karkhanas and their organisation.`},
+      {name:`Women`, context:`Women's status in nobility, harem politics, Rajput customs (jauhar, purdah), Bhakti saint women.`},
+      {name:`Servants and Slaves`, context:`Slavery under the Sultanate and Mughals; domestic and military slavery; manumission practices.`},
+      {name:`Standard of Living`, context:`Differential living standards from nobles to peasants; famines and their social impact.`},
+      {name:`The Ruling Classes — Nobility, Rural Gentry`, context:`Mughal mansabdars, jagirdars, zamindars — a composite ruling class analysis.`},
+      {name:`The Middle Strata`, context:`Merchants, scribes, physicians, small landowners — intermediary social groups.`},
+      {name:`The Commercial Classes`, context:`Banias, Jains, Marwaris, Bohras — trading communities and their networks across India.`}
+    ]},
+  { id:25, era:'medieval', icon:'💰', title:`Economic Life — Patterns and Prospects`, group:'medieval',
+    blurb:`Medieval Indian economy — inland and overseas trade, the Mughal state and commerce, and 18th century transition.`,
+    subtopics:[
+      {name:`Inland Trade`, context:`Overland trade routes, sarais, river transport, weekly markets and commodity flows.`},
+      {name:`Overseas Trade — Role of Foreign Traders`, context:`Indian Ocean trade, Gujarat ports, spice and textile exports, Portuguese disruption.`},
+      {name:`Position of Indian Merchants in Land and Sea Trade`, context:`Banias and shroffs; hundi system; Indian merchant communities overseas.`},
+      {name:`The Mughal State and Commerce`, context:`State revenue from trade, customs duties; Mughal encouragement of artisan production.`},
+      {name:`18th Century Economic Trends`, context:`Post-Mughal fragmentation, rise of regional trade networks, early European company expansion.`}
+    ]},
+  { id:26, era:'medieval', icon:'🎨', title:`Religion, Fine Arts, Science and Technology`, group:'medieval',
+    blurb:`Bhakti, Sufi movements, Indo-Islamic architecture, Mughal painting, literature and medieval technology.`,
+    subtopics:[
+      {name:`Bhakti Movement`, context:`Ramanuja, Ramananda, Kabir, Mirabai, Tukaram, Chaitanya — philosophy, social reform and devotion.`},
+      {name:`Sufi Movement`, context:`Four main silsilas: Chishti, Suhrawardi, Qadiri, Naqshbandi — philosophy and social impact.`},
+      {name:`Sikhism — Growth and Development`, context:`Ten Gurus, Adi Granth, Khalsa (1699), Sikh-Mughal relations from Guru Nanak to Guru Gobind Singh.`},
+      {name:`Architecture — Indo-Islamic Synthesis`, context:`Quwwat-ul-Islam to Taj Mahal; Sultanate, Mughal, provincial styles; temple vs mosque architecture.`},
+      {name:`Painting — Mughal, Rajput and Deccani Schools`, context:`Persian influence, Akbar's karkhana, Jahangir's naturalism, Rajput miniatures, Deccani style.`},
+      {name:`Language and Literature`, context:`Persian as court language; Hindi, Braj, Awadhi; Urdu's birth; regional language literatures.`},
+      {name:`Music — Hindustani Classical Tradition`, context:`Amir Khusrau's innovations; Tansen at Akbar's court; dhrupad, khayal development.`},
+      {name:`Science and Technology`, context:`Agricultural techniques, textile technology, iron-smelting; Jai Singh's observatories; ship-building.`}
+    ]},
+  { id:27, era:'medieval', icon:'⚖️', title:`Northern India in the First Half of the 18th Century`, group:'medieval',
+    blurb:`Post-Aurangzeb disintegration — Later Mughals, Sayyid Brothers, Nizam-ul-Mulk and Maratha advance.`,
+    subtopics:[
+      {name:`Later Mughals and their Decline`, context:`Bahadur Shah I to Ahmad Shah; rapid succession, weak emperors, noble dominance.`},
+      {name:`Regional Powers in the 18th Century`, context:`Hyderabad, Awadh, Bengal — three major successor states and their distinct characters.`},
+      {name:`The Sayyid Brothers — Kingmakers`, context:`Abdullah Khan and Hussain Ali — installing and deposing Mughal emperors; Farrukhsiyar's execution.`},
+      {name:`Nizam-ul-Mulk and Hyderabad`, context:`Chin Qilich Khan's break from Delhi, establishment of Hyderabad state, administrative model.`},
+      {name:`Nadir Shah's Invasion (1739)`, context:`Causes, the battle of Karnal, sack of Delhi, Peacock Throne taken; impact on Mughal prestige.`},
+      {name:`Ahmad Shah Abdali's Invasions (1748–67)`, context:`Multiple invasions; Punjab lost; Battle of Panipat 1761; long-term consequences.`},
+      {name:`Advent of Europeans in India`, context:`Portuguese, Dutch, French, British trading companies — from trade to territorial ambitions.`}
+    ]},
+  { id:28, era:'medieval', icon:'🚩', title:`The Maratha Bid for Supremacy`, group:'medieval',
+    blurb:`Maratha expansion under the Peshwas — from Deccan base to all-India ambition and the Third Battle of Panipat.`,
+    subtopics:[
+      {name:`Maratha Confederacy — Organisation and Policy of Expansion`, context:`Balaji Vishwanath, Baji Rao I — chauth collection across India; Gaekwad, Holkar, Scindia, Bhonsle.`},
+      {name:`Baji Rao I — Battle of Palkhed (1728)`, context:`Masterstroke against Nizam-ul-Mulk; Maratha supremacy over Deccan confirmed; northern expansion.`},
+      {name:`Maratha Advance into Gujarat and Malwa`, context:`Revenue rights, expansion into western and central India; conflicts with Mughals and Rajputs.`},
+      {name:`Maratha Advance into Doab and Punjab`, context:`Northern ambitions; conflicts with Rohillas and Afghans; overextension of the confederacy.`},
+      {name:`Maratha Dominance at Delhi — Protecting the Mughals`, context:`Marathas as protectors of Mughal emperor; virtual control of Delhi; Vishwas Rao at Panipat.`},
+      {name:`Third Battle of Panipat (1761)`, context:`Ahmad Shah Abdali vs Marathas; catastrophic Maratha defeat; historical debate on causes and consequences.`}
+    ]},
+  { id:29, era:'modern', icon:'🏴', title:`Scenario Before 1857`, group:'modern',
+    blurb:`The conditions that made India ripe for the Great Revolt — colonial rule, European wars and their Indian impact.`,
+    subtopics:[
+      {name:`Later Mughals & their Decline`, context:`Rapid succession of weak Mughal emperors, noble factionalism, and the power vacuum that welcomed British expansion.`},
+      {name:`Regional Powers in the 18th Century`, context:`Hyderabad, Mysore, Marathas, Sikhs, Awadh — how regional powers rose and fell before 1857.`},
+      {name:`Advent of Europeans in India`, context:`Portuguese, Dutch, French, British — from trading posts to territorial ambitions; Carnatic Wars.`},
+      {name:`The British Conquest of India`, context:`Subsidiary alliance, doctrine of lapse, annexation policies; how the British built their empire.`},
+      {name:`Carnatic Wars`, context:`Three Carnatic Wars (1740–63): Anglo-French rivalry, Dupleix, Clive and the end of French power in India.`},
+      {name:`Battle of Plassey & Buxar`, context:`1757 Plassey: Siraj-ud-Daulah's defeat; 1764 Buxar: British supremacy over Bengal, Bihar, Orissa confirmed.`},
+      {name:`Anglo-Mysore War`, context:`Four Anglo-Mysore Wars (1767–99); Hyder Ali, Tipu Sultan, Treaty of Seringapatam and fall of Mysore.`},
+      {name:`Anglo-Punjab War`, context:`First (1845–46) and Second (1848–49) Anglo-Sikh Wars; Treaty of Lahore; annexation of Punjab.`},
+      {name:`British Administration Before 1857`, context:`Regulating Act 1773, Pitt's India Act 1784, Charter Acts; administrative and judicial reforms pre-1857.`}
+    ]},
+  { id:30, era:'modern', icon:'🔥', title:`Revolt of 1857`, group:'modern',
+    blurb:`The first war of independence or a sepoy mutiny? Causes, spread, leaders and its transformative consequences.`,
+    subtopics:[
+      {name:`Causes for Revolt of 1857`, context:`Military grievances (greased cartridges), economic exploitation, land revenue policies, social reforms, annexations — multiple causes.`},
+      {name:`Leaders of Revolt of 1857`, context:`Bahadur Shah Zafar, Nana Sahib, Tantia Tope, Rani Lakshmibai, Begum Hazrat Mahal, Kunwar Singh.`},
+      {name:`Suppression of Revolt of 1857`, context:`British military response, regional isolation of the revolt, fall of Delhi and Lucknow, role of Sikh and Gurkha troops.`},
+      {name:`Nature of Revolt of 1857`, context:`Historiographical debate: Mutiny (British view) vs First War of Independence (VD Savarkar) vs feudal reaction vs national uprising.`},
+      {name:`Consequences of Revolt of 1857`, context:`End of East India Company rule, Queen's Proclamation 1858, reorganisation of army, new India policy.`}
+    ]},
+  { id:31, era:'modern', icon:'🌱', title:`Early Nationalism`, group:'modern',
+    blurb:`The birth of organised political consciousness — pre-Congress organisations, the INC's founding and the early nationalist phase.`,
+    subtopics:[
+      {name:`Pre-Congress Organisations`, context:`Landholders' Society, British India Association, Madras Native Association, Poona Sarvajanik Sabha — precursors to INC.`},
+      {name:`Indian National Movement (1858–1905)`, context:`Founding of INC (1885), Dadabhai Naoroji's drain theory, Gokhale, early moderate phase and its methods.`},
+      {name:`Early Nationalists and Swadeshi Movement`, context:`Tilak, Lajpat Rai, Bipin Chandra Pal (Lal-Bal-Pal); partition of Bengal 1905 and Swadeshi response.`},
+      {name:`Government of India Act 1909`, context:`Morley-Minto Reforms: separate electorates for Muslims, limited legislative expansion, Indian reaction.`},
+      {name:`Home Rule League Movement`, context:`Tilak's Home Rule League (1916) and Annie Besant's Home Rule League — demand for self-governance within empire.`}
+    ]},
+  { id:32, era:'modern', icon:'🧵', title:`The Struggle for Swaraj`, group:'modern',
+    blurb:`Gandhi's entry into Indian politics, mass movements, constitutional reforms and the crescendo of the freedom struggle.`,
+    subtopics:[
+      {name:`Montague's Statement — Aug 1917`, context:`Announcement of 'increasing association of Indians' — the reform trigger; Montagu-Chelmsford Report (1918).`},
+      {name:`Emergence of Gandhi as a Mass Leader`, context:`Champaran (1917), Kheda (1918), Ahmedabad Mill Strike; Gandhi's methods: satyagraha, non-violence.`},
+      {name:`Khilafat & Non-Cooperation Movement (NCM)`, context:`1920–22: Hindu-Muslim unity, boycott of councils, courts, schools; Chauri Chaura and withdrawal.`},
+      {name:`Swaraj Party`, context:`Motilal Nehru and C.R. Das: entering legislatures from within to obstruct; impact and dissolution.`},
+      {name:`Revolutionary Terrorism Phase II (1920s)`, context:`Hindustan Republican Association (HRA); Bhagat Singh, Sukhdev, Rajguru; Chittagong Armoury Raid.`},
+      {name:`Simon Commission and Nehru Report`, context:`1927 Simon Commission boycott (all-white); Nehru Report 1928 — first Indian constitutional blueprint.`}
+    ]},
+  { id:33, era:'modern', icon:'✊', title:`March towards Freedom`, group:'modern',
+    blurb:`Civil Disobedience, Round Table Conferences, Government of India Act 1935 and Quit India — the final push.`,
+    subtopics:[
+      {name:`Civil Disobedience Movement`, context:`Salt March (1930), Dandi; nationwide CDM — boycott, salt manufacture; Gandhi-Irwin Pact 1931.`},
+      {name:`Round Table Conference`, context:`Three RTCs (1930–32); Gandhi at second RTC; communal award; failure to achieve consensus.`},
+      {name:`Poona Pact`, context:`1932 Gandhi-Ambedkar agreement: separate electorate abandoned, reserved seats in general electorate.`},
+      {name:`Government of India Act 1935`, context:`Provincial autonomy, federal structure, dyarchy at centre, Burma separation; significance for Constitution.`},
+      {name:`Formation of Congress Ministries`, context:`1937 elections, Congress ministries in 7 provinces, Congress rule experience and Muslim League reaction.`},
+      {name:`Tripuri Session — 1939`, context:`Subhas Bose vs Gandhi; Bose elected INC president; ideological split; Bose's resignation and Forward Bloc.`}
+    ]},
+  { id:34, era:'modern', icon:'🏳️', title:`Towards Achievement of Freedom`, group:'modern',
+    blurb:`Quit India, INA, August Offer, Individual Satyagraha and the final negotiations for independence.`,
+    subtopics:[
+      {name:`August Offer`, context:`1940 Viceroy Linlithgow's offer: dominion status after war, expansion of Executive Council — rejected by INC.`},
+      {name:`Individual Satyagraha 1940–41`, context:`Limited satyagraha by selected individuals (Vinoba Bhave first); symbolic protest against war participation.`},
+      {name:`Popular Struggles in the Princely States`, context:`Praja Mandals, people's movements in Hyderabad, Kashmir, Travancore against autocratic princes.`},
+      {name:`2nd World War and Nationalist Response`, context:`Congress vs war participation; Cripps Mission 1942; Quit India Movement August 1942; INA under Bose.`}
+    ]},
+  { id:35, era:'modern', icon:'💔', title:`Partition of India`, group:'modern',
+    blurb:`The communal path to partition — Wavell Plan, Cabinet Mission, Mountbatten Plan and the tragedy of division.`,
+    subtopics:[
+      {name:`Rise of Communalism`, context:`Muslim League's two-nation theory; Hindu Mahasabha; roots of communal politics in colonial India.`},
+      {name:`Wavell Plan`, context:`1945 Simla Conference; Wavell's proposal for Indianised executive council; Jinnah's veto.`},
+      {name:`Cabinet Mission Plan`, context:`1946: three-tier federation proposal; grouping of provinces; Congress-League disagreement; its failure.`},
+      {name:`Mountbatten Plan`, context:`June 3, 1947 plan: partition of Punjab and Bengal, referendum in NWFP, Independence for two dominions.`}
+    ]},
+  { id:36, era:'modern', icon:'📊', title:`Trends During the Freedom Struggle`, group:'modern',
+    blurb:`The social, economic and ideological currents running beneath the political freedom movement.`,
+    subtopics:[
+      {name:`Indian Renaissance / Socio-Religious Movements`, context:`Ram Mohan Roy, Brahmo Samaj, Arya Samaj, Ramakrishna Mission, Theosophical Society — reform and revival.`},
+      {name:`Civil Rebellions during British Period`, context:`Sanyasi Rebellion, Wahabi Movement, Indigo Revolt, Deccan Riots, Moplah Rebellion — peasant uprisings.`},
+      {name:`Tribal Movements during British Period`, context:`Santhal Rebellion, Munda Ulgulan (Birsa Munda), Naga Hills movements — tribal resistance to colonial exploitation.`},
+      {name:`Peasant's Movement during British Period`, context:`Champaran, Kheda, Bardoli Satyagraha; Kisan Sabha movements; agrarian roots of nationalist politics.`},
+      {name:`Working Class Movement (1850–1900)`, context:`Early trade unionism, mill workers, Bombay textile strikes, All India Trade Union Congress (AITUC) 1920.`},
+      {name:`Growth of Communalism`, context:`From syncretic nationalism to communal politics; Separate electorates, Hindu-Muslim riots, Cawnpore riots.`},
+      {name:`Left and Communist Trends in National Movement`, context:`CPI founding 1920, Socialist Congress faction (1934), Congress Socialist Party, M.N. Roy's role.`},
+      {name:`Press and Education during British Period`, context:`Vernacular Press Act, growth of nationalist journalism; western education's unintended nationalist consequences.`},
+      {name:`Role of Women in Freedom Struggle`, context:`Sarojini Naidu, Kasturba Gandhi, Aruna Asaf Ali, Sucheta Kripalani, Matangini Hazra and mass female participation.`},
+      {name:`Governor Generals of India`, context:`Cornwallis, Wellesley, Hastings, Dalhousie, Canning — key policies and their impact on Indian society.`},
+      {name:`Viceroys of India`, context:`Curzon (partition of Bengal), Minto (communal electorates), Irwin (Gandhi pact), Mountbatten (partition).`},
+      {name:`Important Persons`, context:`Dadabhai Naoroji, Pherozeshah Mehta, Gokhale, Tilak, Bose, Ambedkar, Nehru — profiles and contributions.`},
+      {name:`Important Newspaper/Journals`, context:`Kesari, Young India, Harijan, Al-Hilal, Comrade, Amrita Bazar Patrika — press and nationalism.`},
+      {name:`Congress Sessions`, context:`Key INC sessions: Surat 1907 (split), Nagpur 1920 (non-cooperation), Lahore 1929 (Purna Swaraj), Karachi 1931 (fundamental rights).`}
+    ]},
+  { id:37, era:'modern', icon:'💷', title:`British Economic Policy & Its Impact`, group:'modern',
+    blurb:`How colonial economic policies drained, deindustrialised and restructured the Indian economy.`,
+    subtopics:[
+      {name:`British Economic Policy`, context:`Drain of wealth, free trade imperialism, land revenue systems (Permanent Settlement, Ryotwari, Mahalwari).`},
+      {name:`Deindustrialisation`, context:`Destruction of traditional industries, forced export of raw materials, destruction of textile industry.`},
+      {name:`Railways and Their Dual Role`, context:`Railways as colonial instrument and unintended tool of national integration and economic development.`},
+      {name:`Indian Response to Economic Exploitation`, context:`Swadeshi movement, economic nationalism, Naoroji's Drain Theory, Dutt's Economic History analysis.`}
+    ]},
+  { id:38, era:'postindep', icon:'🗺️', title:`Re-organisation & Integration of States`, group:'postindep',
+    blurb:`The massive challenge of welding 562 princely states and reorganising provinces into a unified, democratic India.`,
+    subtopics:[
+      {name:`Constitutional Provisions Related to State Formation`, context:`Articles 1–4, Schedule I; how the Constitution defined the Indian Union and provided for states' reorganisation.`},
+      {name:`Factors that Lead to the Merger of States`, context:`Sardar Patel's role, instrument of accession, policy of integration, standstill agreements with princes.`},
+      {name:`Accession of the Princely States`, context:`565 states integrated; methods: negotiation, persuasion and police action; key examples — Junagadh, Hyderabad, Kashmir.`},
+      {name:`Problems with J&K, Hyderabad and Junagarh`, context:`Hari Singh's accession; Operation Polo (Hyderabad); Junagadh plebiscite — three distinct integration challenges.`},
+      {name:`Accession of States under France and Portuguese`, context:`Pondicherry (1954 de facto, 1962 de jure); Goa liberation (1961) — Operation Vijay; Daman and Diu.`},
+      {name:`Accession of Sikkim`, context:`1975 referendum; merger as India's 22nd state; geopolitical significance and controversy.`},
+      {name:`Rehabilitation of the Refugees`, context:`Partition refugees — 7.2 million displaced; resettlement in Punjab, Bengal, Delhi; policy challenges.`},
+      {name:`Federal Crisis`, context:`Centre-state relations; dismissal of state governments; President's Rule (Article 356) controversies.`},
+      {name:`Regional Aspirations, Insurgencies and Areas of Tension`, context:`Naga movement, Manipur, Punjab crisis, Bodoland — regional aspirations and state's response.`},
+      {name:`Accommodation and National Integration`, context:`Language policy, cultural federalism, National Integration Council; India's unity-in-diversity approach.`}
+    ]},
+  { id:39, era:'postindep', icon:'🗣️', title:`Linguistic Regionalism in India`, group:'postindep',
+    blurb:`The reorganisation of states on linguistic lines — from the Dar Commission to the States Reorganisation Act 1956.`,
+    subtopics:[
+      {name:`Constitutional Position and Language Policy`, context:`8th Schedule (original 14 languages), three-language formula, Official Languages Act 1963, Hindi controversy.`},
+      {name:`Language and Regionalism`, context:`Andhra agitation (Potti Sriramulu), Fazl Ali Commission (SRC), States Reorganisation Act 1956 outcomes.`},
+      {name:`Recent Controversy Due to Rise of Hindi Language`, context:`Anti-Hindi agitations, Tamil Nadu 1965, three-language formula debates, NEP 2020 language controversy.`}
+    ]},
+  { id:40, era:'postindep', icon:'🌿', title:`Tribal Issue and Policy Consolidation`, group:'postindep',
+    blurb:`Independent India's approach to tribal communities — PESA, Fifth and Sixth Schedules, tribal development.`,
+    subtopics:[
+      {name:`Tribal Issues & Present Status`, context:`Land alienation, forest rights, displacement by development projects, Fifth and Sixth Schedule provisions.`},
+      {name:`Tribal Policy Consolidation`, context:`Nehru's Panchsheel for tribes, PESA 1996, Forest Rights Act 2006, Van Dhan Vikas Kendras — policy evolution.`}
+    ]},
+  { id:41, era:'postindep', icon:'⚖️', title:`Problem of Caste and Social Consolidation`, group:'postindep',
+    blurb:`Constitutional provisions against caste discrimination, the Ambedkar legacy, OBC politics and Dalit movements.`,
+    subtopics:[
+      {name:`Caste Practices in India`, context:`Untouchability, social exclusion, caste violence; continuity and change in independent India.`},
+      {name:`Ambedkar Movement`, context:`Dr Ambedkar's political and social activism; Dalit Panthers; conversion to Buddhism (1956); legacy.`},
+      {name:`Constitutional Provisions`, context:`Articles 15, 16, 17, 46; Scheduled Castes & Tribes (Prevention of Atrocities) Act; reservation policy.`},
+      {name:`Recent Government Initiatives for Emancipation of Scheduled Castes`, context:`Pradhan Mantri Adarsh Gram Yojana, Stand-Up India, post-Mandal OBC reservation — SC/ST welfare evolution.`},
+      {name:`Issues of Manual Scavenging`, context:`Prohibition of Employment as Manual Scavengers Act 2013, SC rulings, rehabilitation challenges.`}
+    ]},
+  { id:42, era:'postindep', icon:'🕊️', title:`Communalism & Social Consolidation`, group:'postindep',
+    blurb:`Secularism in the Constitution vs communal violence in practice — causes, consequences and state response.`,
+    subtopics:[
+      {name:`Secularism`, context:`Constitutional secularism (Articles 25–28), Indian model vs Western secularism, debates on 'pseudo-secularism'.`},
+      {name:`Causes of Communalism in India`, context:`Historical roots, economic competition, political mobilisation, role of media and propaganda in communal violence.`},
+      {name:`Consequences of the Communalism and Social Consolidation`, context:`Communal riots (Bhiwandi 1970, Delhi 1984, Babri 1992, Gujarat 2002) — patterns and political consequences.`}
+    ]},
+  { id:43, era:'postindep', icon:'🤝', title:`Issue of Linguistic Minorities`, group:'postindep',
+    blurb:`Constitutional safeguards for linguistic minorities — Commissioner, Special Officer and their effectiveness.`,
+    subtopics:[
+      {name:`Operational Inefficiency`, context:`Commissioner for Linguistic Minorities reports; gap between constitutional guarantees and ground reality.`},
+      {name:`Government Initiatives`, context:`National Commission for Minorities, scholarships, institutional support for minority languages — assessment.`}
+    ]},
+  { id:44, era:'postindep', icon:'📈', title:`Overview of Economic Development Since Independence`, group:'postindep',
+    blurb:`India's economic journey — from planning to liberalisation, agricultural revolution to industrial growth.`,
+    subtopics:[
+      {name:`Planning in India`, context:`Planning Commission, Five Year Plans (1951–2017), NITI Aayog; objectives, achievements and failures.`},
+      {name:`Journey through Five Year Plans`, context:`Each plan's thrust areas: 1st (agriculture), 2nd (industry/Mahalanobis), 3rd–5th, 6th (poverty alleviation), later plans.`},
+      {name:`Land Reforms`, context:`Abolition of zamindari, tenancy reforms, land ceiling, PEPSU and Bhumidhar rights — achievements and limits.`},
+      {name:`Post Green Revolution Agricultural Issues`, context:`Agrarian distress, crop diversification failure, farmer suicides, MSP politics, APMC Act debates.`},
+      {name:`Agrarian Movements`, context:`Farmers' agitations post-independence — Naxalbari 1967, Shetkari Sanghatana, 2020–21 farm law protests.`},
+      {name:`Achievements in Agriculture since Independence`, context:`Green Revolution (1960s), White Revolution (Operation Flood), Blue Revolution; food security attained.`},
+      {name:`Recent Challenges`, context:`Climate change impact on agriculture, water stress, soil degradation, rural-urban migration.`}
+    ]},
+  { id:45, era:'postindep', icon:'🏭', title:`Industry`, group:'postindep',
+    blurb:`Industrial development from Nehruvian heavy industry model through liberalisation to Make in India.`,
+    subtopics:[
+      {name:`Industrial Development since Independence`, context:`IPR 1948, 1956; mixed economy model; Bhilai, Bokaro steel plants; public sector growth.`},
+      {name:`Public Sector since Independence`, context:`Rationale for public sector, rise and decline, disinvestment policy, strategic sectors debate.`},
+      {name:`Sectoral Development`, context:`Growth of services sector, IT boom, manufacturing stagnation; structural transformation of Indian economy.`},
+      {name:`Private Sector since Independence`, context:`TATA, Birla, Ambani — growth of Indian private enterprise; MRTP Act, liberalisation impact.`},
+      {name:`Industrial Policy since Independence`, context:`IPR 1948, 1956, 1977, 1991 reforms (LPG), Make in India (2014), PLI schemes.`},
+      {name:`Make in India`, context:`2014 initiative: 25 focus sectors, FDI liberalisation, ease of doing business; achievements and criticism.`}
+    ]},
+  { id:46, era:'postindep', icon:'💹', title:`New Economic Policy`, group:'postindep',
+    blurb:`The 1991 LPG reforms — liberalisation, privatisation and globalisation — and their impact on India.`,
+    subtopics:[
+      {name:`Impact of New Economic Policy`, context:`GDP acceleration, poverty reduction, inequality increase, deindustrialisation of small-scale sector, trade impact.`}
+    ]},
+  { id:47, era:'postindep', icon:'🔬', title:`Post-Independence Policy of Science and Technology`, group:'postindep',
+    blurb:`India's scientific institutions, space programme, nuclear capability and technology development policy.`,
+    subtopics:[
+      {name:`India's Policy in the Field of Science and Technology`, context:`Scientific Policy Resolution 1958, Technology Policy Statement 1983, Science & Technology Policy 2003, STI Policy 2013.`},
+      {name:`Institutional Framework for Science and Technology Development`, context:`CSIR, DRDO, DAE, ISRO, ICAR — India's scientific institution network and their contributions.`},
+      {name:`Science and Technology in Pre-Reform Period`, context:`Nehru's temples of modern India — IITs, AIIMS, atomic energy programme, Green Revolution technology.`},
+      {name:`Impact of Economic Reform on the Science and Technology in India`, context:`IT revolution, pharma growth, biotech, software exports — private sector-driven tech growth post-1991.`},
+      {name:`New Policy Initiatives in the S&T`, context:`National Quantum Mission, Deep Ocean Mission, Gaganyaan, Semiconductor Mission — recent S&T priorities.`},
+      {name:`Agenda of the Skill Training`, context:`Skill India Mission, PMKVY, National Skill Development Corporation, vocational training ecosystem.`}
+    ]},
+  { id:48, era:'postindep', icon:'🌍', title:`World History (Beginning of Modern Age)`, group:'postindep',
+    blurb:`The global context — Renaissance, Reformation, Industrial Revolution, imperialism and the World Wars.`,
+    subtopics:[
+      {name:`Disintegration of the Feudal System`, context:`End of feudalism in Europe — Black Death, Crusades, growth of towns and merchant class.`},
+      {name:`Renaissance`, context:`14th–17th century rebirth of art, science, philosophy; Humanism; key figures: Leonardo, Michelangelo, Erasmus.`},
+      {name:`Humanism`, context:`Humanist philosophy, secularism, individualism — ideological foundation of the modern world.`},
+      {name:`Art and Architecture`, context:`Renaissance art — perspective, naturalism; Baroque, Gothic; key works and their cultural significance.`},
+      {name:`Literature`, context:`Dante, Chaucer, Shakespeare, Cervantes — vernacular literature and the end of Latin's monopoly.`},
+      {name:`Industrial Revolution`, context:`Britain 1760s–1840s; steam power, factory system, railways; global spread and social consequences.`},
+      {name:`Imperialism and Colonialism`, context:`European scramble for Africa and Asia, Hobson-Lenin thesis, civilising mission ideology, resistance.`},
+      {name:`American Revolution (1776)`, context:`Causes, Declaration of Independence, constitutional republic — impact on Enlightenment and future revolutions.`},
+      {name:`French Revolution (1789)`, context:`Liberty, Equality, Fraternity; causes, phases, Jacobins, Thermidor, Napoleon — global consequences.`},
+      {name:`Russian Revolution (1917)`, context:`February and October Revolutions; Lenin, Bolsheviks, Soviet state — impact on world politics and India.`},
+      {name:`World War I`, context:`Causes (alliance system, imperialism, nationalism, militarism), major battles, Treaty of Versailles, consequences.`},
+      {name:`World War II`, context:`Rise of fascism, Holocaust, Pacific War, Manhattan Project, end of European empires, Cold War origin.`},
+      {name:`Cold War`, context:`US-USSR rivalry, Korean War, Cuban Crisis, Vietnam, non-alignment movement, India's foreign policy context.`},
+      {name:`Decolonisation`, context:`African and Asian independence movements; UN's role; India's role in Bandung Conference 1955, NAM.`}
+    ]},
+  { id:49, era:'worldhist', icon:'🏰', title:`Beginning of the Modern Age`, group:'worldhist',
+    blurb:`The end of the medieval world — feudalism's collapse, the Renaissance, Reformation and the birth of the modern nation-state.`,
+    subtopics:[
+      {name:`Disintegration of the Feudal System`, context:`Black Death, Crusades, growth of towns and merchant class, monetisation of economy — how feudalism ended in Europe.`},
+      {name:`Renaissance — Overview and Significance`, context:`14th–17th century rebirth of art, science, philosophy; Italy as cradle; spread across Europe; UPSC significance.`},
+      {name:`Humanism`, context:`Humanist philosophy — secularism, individualism, reason over faith; Erasmus, Petrarch; ideological bedrock of modernity.`},
+      {name:`Art and Architecture of the Renaissance`, context:`Perspective, naturalism, patronage; Leonardo da Vinci, Michelangelo, Raphael; Sistine Chapel, St Peter's Basilica.`},
+      {name:`Literature of the Renaissance`, context:`Dante, Chaucer, Shakespeare, Cervantes, Machiavelli — vernacular literature and the end of Latin's monopoly.`},
+      {name:`Science in the Renaissance`, context:`Copernicus, Galileo, Vesalius, Kepler — the Scientific Revolution and its challenge to Church authority.`},
+      {name:`Reformation`, context:`Martin Luther (95 Theses 1517), Calvin, Zwingli; Protestant Reformation; Counter-Reformation; religious wars.`},
+      {name:`Explorations, Discovery, Trade`, context:`Vasco da Gama, Columbus, Magellan; Age of Discovery; impact on global trade, indigenous peoples and colonialism.`},
+      {name:`Colonisation — Rise of Nation-State`, context:`Spanish, Portuguese, Dutch, British colonialism; mercantilism; how colonisation shaped the nation-state system.`},
+      {name:`The English Revolution`, context:`English Civil War (1642–51), Cromwell, Glorious Revolution (1688), Bill of Rights 1689 — constitutional monarchy born.`}
+    ]},
+  { id:50, era:'worldhist', icon:'⚔️', title:`French Revolution`, group:'worldhist',
+    blurb:`1789 — the revolution that gave the world Liberty, Equality and Fraternity and changed global political thought forever.`,
+    subtopics:[
+      {name:`Causes of the French Revolution`, context:`Financial crisis, social inequality (Three Estates), Enlightenment ideas, weak Louis XVI, food scarcity — multi-causal analysis.`},
+      {name:`The Revolution in France — Phases`, context:`Constitutional Monarchy (1789–92), First Republic (1792), Reign of Terror (1793–94), Thermidorian Reaction, Directory.`},
+      {name:`France under Napoleon`, context:`Napoleon's rise, Consulate, Empire; Napoleonic Code, administrative reforms, Continental System; campaigns and defeats.`},
+      {name:`Impact of Revolution`, context:`Declaration of Rights of Man; spread of revolutionary ideals; Congress of Vienna 1815; nationalism awakened.`},
+      {name:`Significance of Revolution`, context:`End of absolute monarchy; secularism; democratic republic ideal; influence on Indian nationalism, Bhagat Singh, Nehru.`},
+      {name:`How did the American Revolution Influence the French Revolution?`, context:`Declaration of Independence as model; Lafayette's role; common Enlightenment roots; key differences.`}
+    ]},
+  { id:51, era:'worldhist', icon:'🗺️', title:`Nationalism in Europe`, group:'worldhist',
+    blurb:`The 19th century wave of nationalist movements — Italian and German unification and the rise of the nation-state system.`,
+    subtopics:[
+      {name:`Rise of the Nation-State System`, context:`From dynastic empires to nation-states; Concert of Europe; revolutions of 1830 and 1848; impact on world order.`},
+      {name:`Unification of Italy`, context:`Cavour's diplomacy, Garibaldi's military campaigns, role of Piedmont-Sardinia; 1861 unification; Rome in 1870.`},
+      {name:`Unification of Germany`, context:`Bismarck's Realpolitik; three wars (Danish, Austro-Prussian, Franco-Prussian); German Empire proclaimed 1871.`},
+      {name:`Nationalism and Imperialism — Link`, context:`How nationalist competition drove European imperialism in Asia and Africa; Social Darwinism's role.`},
+      {name:`Impact on India`, context:`How European nationalism inspired Indian nationalists — Tilak, Bose; parallels with Indian independence movement.`}
+    ]},
+  { id:52, era:'worldhist', icon:'🌐', title:`Colonialism and Imperialism`, group:'worldhist',
+    blurb:`The age of European global domination — ideological justifications, economic extraction and resistance movements.`,
+    subtopics:[
+      {name:`Colonialism — Concept and Types`, context:`Settler colonialism, exploitation colonialism, plantation colonialism; British India as case study.`},
+      {name:`The Age of Imperialism (1870–1914)`, context:`Scramble for Africa, Berlin Conference 1884, Asia partitioned; motives: economic, strategic, ideological.`},
+      {name:`Imperialism in Asia`, context:`British India, French Indochina, Dutch East Indies, American Philippines — Asian colonisation compared.`},
+      {name:`Analysis of Colonialism`, context:`Hobson-Lenin thesis on imperialism; dependency theory; Said's Orientalism; long-term economic consequences for colonies.`},
+      {name:`Resistance to Colonialism`, context:`African resistance (Zulu, Ethiopia at Adwa 1896), Asian revolts, Philippine-American War; proto-nationalist movements.`}
+    ]},
+  { id:53, era:'worldhist', icon:'🦅', title:`Emergence of USA as a World Power`, group:'worldhist',
+    blurb:`From colonial rebellion to global superpower — American Revolution, Civil War and the rise of American imperialism.`,
+    subtopics:[
+      {name:`Foundation of American Colonies`, context:`Thirteen colonies, mercantile exploitation, Enlightenment influence; taxation without representation grievances.`},
+      {name:`The American Revolutionary War`, context:`1775–83; Boston Tea Party, Declaration of Independence (1776), Yorktown, Treaty of Paris — causes and course.`},
+      {name:`The Independence of United States of America`, context:`Philadelphia Convention 1787, US Constitution, Bill of Rights; federal republic model's global influence.`},
+      {name:`What was the Impact of American Revolution?`, context:`Inspiration to France, Latin America; spread of republican ideals; Founding Fathers' political philosophy.`},
+      {name:`Political Effects of the Revolution`, context:`Republicanism, separation of powers, checks and balances, federalism — enduring political innovations.`},
+      {name:`US Civil War`, context:`1861–65; slavery as root cause, sectionalism, Lincoln, Emancipation Proclamation 1863, Reconstruction era.`},
+      {name:`Impact of Civil War on USA`, context:`Abolition of slavery (13th Amendment), national unity over states' rights, industrialisation of the North, Gilded Age.`},
+      {name:`Global Impact of US Civil War`, context:`Cotton famine in Britain, impact on India (Deccan riots context), shift in global textile trade.`},
+      {name:`Impact on India`, context:`American constitutional model's influence on Indian Constitution; Roosevelt's Four Freedoms and Indian nationalists.`}
+    ]},
+  { id:54, era:'worldhist', icon:'💣', title:`World War I`, group:'worldhist',
+    blurb:`The Great War (1914–18) — causes, course, consequences and the fatally flawed peace that made World War II inevitable.`,
+    subtopics:[
+      {name:`Major Causes of the War`, context:`MAIN acronym: Militarism, Alliance system (Triple Entente vs Triple Alliance), Imperialism, Nationalism; Sarajevo assassination.`},
+      {name:`Course of the War`, context:`Western Front (trench warfare), Eastern Front, Gallipoli, naval warfare, US entry 1917; major battles: Somme, Verdun, Jutland.`},
+      {name:`Analysis of Major Events of the War`, context:`Schlieffen Plan failure, Russian Revolution's impact, collapse of Ottoman Empire, Indian troops' role.`},
+      {name:`Consequences of World War I`, context:`10 million dead, four empires dissolved, redrawing of maps, Treaty of Versailles 1919, war guilt clause.`},
+      {name:`Aftermath of World War I`, context:`Influenza pandemic 1918, economic devastation, Weimar Republic, Great Depression roots, Middle East remapped.`},
+      {name:`League of Nations`, context:`Wilson's Fourteen Points, founding 1920, US non-membership, successes, failures; why it could not prevent WWII.`},
+      {name:`India's Role in World War I`, context:`1.5 million Indian soldiers; Mesopotamia campaign; impact on nationalist politics; Montagu-Chelmsford reforms link.`}
+    ]},
+  { id:55, era:'worldhist', icon:'⭐', title:`Russian Revolution`, group:'worldhist',
+    blurb:`1917 — the revolution that created the world's first communist state and reshaped global ideological conflict for 70 years.`,
+    subtopics:[
+      {name:`Major Events in Pre-Revolution Russia`, context:`Romanov autocracy, Crimean War, Russo-Japanese War 1905, Bloody Sunday, Stolypin reforms — build-up to revolution.`},
+      {name:`Causes of the Russian Revolution`, context:`Tsarist autocracy, WWI catastrophe, land hunger, urban proletariat misery, Marxist ideology, weak Provisional Govt.`},
+      {name:`Course of Revolution — Feb & Oct 1917`, context:`February Revolution (Tsar abdicates), Provisional Government, Lenin's April Theses, October Revolution (Bolsheviks).`},
+      {name:`Consequences of the Russian Revolution`, context:`Civil War, Red Terror, New Economic Policy, formation of USSR 1922, spread of communism globally.`},
+      {name:`Aftermath of the War — Stalin's USSR`, context:`Collectivisation, Five Year Plans, Great Purge (1936–38), Gulag system, totalitarianism.`},
+      {name:`Post-Lenin Russia`, context:`Power struggle after Lenin (1924); Stalin vs Trotsky; Stalin's consolidation; ideological legacy of Leninism.`},
+      {name:`Impact on India`, context:`CPI formation 1920; M.N. Roy; Congress Socialist Party; Soviet model's influence on Nehru's planning.`}
+    ]},
+  { id:56, era:'worldhist', icon:'📉', title:`Inter-War Years (1919–1939)`, group:'worldhist',
+    blurb:`The fragile peace between two world wars — the Great Depression, rise of fascism, Nazism and the failure of collective security.`,
+    subtopics:[
+      {name:`The Great Depression — An Economic Perspective`, context:`Wall Street Crash 1929, bank failures, unemployment, Hoover's failure, Roosevelt's New Deal, global spread.`},
+      {name:`Rise of Fascism in Italy`, context:`Mussolini, Blackshirts, March on Rome 1922, Corporate State, Ethiopian invasion — fascism's template.`},
+      {name:`Rise of Nazism in Germany`, context:`Weimar Republic's weakness, Hitler, NSDAP, Mein Kampf, Night of Long Knives, Nuremberg Laws, Holocaust roots.`},
+      {name:`Soviet Union (USSR) in the Interwar Period`, context:`Stalin's purges, collectivisation, Five Year Plans; USSR as alternative model to capitalism.`},
+      {name:`Appeasement Policy and its Failure`, context:`Chamberlain, Munich Agreement 1938, Czechoslovakia sacrificed; why appeasement failed; lessons for diplomacy.`},
+      {name:`Spanish Civil War (1936–39)`, context:`Franco, Republican vs Nationalist forces; international brigades; Nazi-Fascist intervention; rehearsal for WWII.`},
+      {name:`Impact on India's Freedom Movement`, context:`Congress's anti-fascist stance; Bose's divergence; INA formation link; WWII accelerating independence.`}
+    ]},
+  { id:57, era:'worldhist', icon:'💥', title:`World War II`, group:'worldhist',
+    blurb:`1939–45: the deadliest conflict in human history — Holocaust, atomic bomb, Allied victory and the new world order.`,
+    subtopics:[
+      {name:`Foundations of the War`, context:`Failure of Versailles, Great Depression, fascism's rise, appeasement policy, Nazi-Soviet Pact (Molotov-Ribbentrop).`},
+      {name:`Course of the War`, context:`Blitzkrieg, Fall of France, Battle of Britain, Operation Barbarossa, Pearl Harbor, North Africa, D-Day, Pacific War.`},
+      {name:`Aftermath of War`, context:`70 million dead, Holocaust (6 million Jews), atomic bombing of Hiroshima-Nagasaki, Nuremberg Trials.`},
+      {name:`Analysis of the War`, context:`Strategic turning points: Stalingrad, Midway, El Alamein; role of logistics, intelligence (Enigma), leadership.`},
+      {name:`Decolonisation Phase`, context:`WWII as catalyst for decolonisation — Atlantic Charter 1941, weakened European powers, nationalist movements' surge.`},
+      {name:`United Nations — Formation and Structure`, context:`San Francisco Conference 1945, UN Charter, Security Council, General Assembly, India's role in early UN.`},
+      {name:`India's Role in World War II`, context:`2.5 million Indian soldiers; Quit India 1942 as response; INA; WWII accelerating British decision to leave India.`}
+    ]},
+  { id:58, era:'worldhist', icon:'🧊', title:`Cold War`, group:'worldhist',
+    blurb:`The ideological contest between USA and USSR (1947–1991) that shaped global politics, divided the world and ended with the Soviet collapse.`,
+    subtopics:[
+      {name:`Reasons for the Cold War`, context:`Ideological conflict (capitalism vs communism), Soviet expansion in Eastern Europe, Truman Doctrine, Iron Curtain.`},
+      {name:`Development of Cold War (1945–1953)`, context:`Berlin Blockade (1948), NATO (1949), Korean War (1950–53), Marshall Plan, Soviet atomic bomb 1949.`},
+      {name:`To What Extent Was There a Thaw After 1953?`, context:`Khrushchev's de-Stalinisation, Geneva Summit 1955, Suez Crisis, Sputnik, Berlin Wall 1961 — partial détente.`},
+      {name:`Nuclear Arms Race and the Cuban Missile Crisis (1962)`, context:`MAD doctrine, Berlin Crisis, Cuban Missile Crisis — 13 days that brought nuclear war closest; resolution and lessons.`},
+      {name:`Vietnam War`, context:`Domino theory, US escalation, Tet Offensive 1968, anti-war movement, US withdrawal 1973, fall of Saigon 1975.`},
+      {name:`Non-Aligned Movement (NAM)`, context:`Bandung 1955, Belgrade 1961; Nehru-Nasser-Tito; India's foreign policy of non-alignment during Cold War.`},
+      {name:`End of the Cold War`, context:`Gorbachev's Glasnost and Perestroika, fall of Berlin Wall 1989, Soviet collapse 1991 — causes and consequences.`},
+      {name:`Impact on India`, context:`Indo-Soviet Treaty 1971, US tilt to Pakistan, NAM, Bangladesh War context, India's strategic autonomy.`}
+    ]},
+  { id:59, era:'worldhist', icon:'🕌', title:`Development in Middle East`, group:'worldhist',
+    blurb:`The modern Middle East — Arab nationalism, Israel-Palestine, oil politics and its impact on world and Indian foreign policy.`,
+    subtopics:[
+      {name:`Democratic Reforms in Middle East`, context:`Arab Spring (2010–12), Turkey's secularism, Iran's Islamic Revolution 1979 — democracy and authoritarianism.`},
+      {name:`Arab Nationalism`, context:`Nasser, Pan-Arabism, Suez Crisis 1956, Ba'athism; why Arab nationalism ultimately failed.`},
+      {name:`Israel`, context:`Zionism, Balfour Declaration 1917, Holocaust and Jewish migration, 1948 war, Arab-Israeli wars, Oslo Accords.`},
+      {name:`Oil Politics and OPEC`, context:`1973 oil crisis, OPEC, petrodollars, Gulf states' rise; impact on India's economy and diaspora.`},
+      {name:`Gulf Wars and Their Impact on India`, context:`Iraq-Iran War, Gulf War 1991, Iraq War 2003; Indian diaspora in Gulf; remittances; oil price impact.`}
+    ]},
+  { id:60, era:'worldhist', icon:'🌐', title:`Post Cold War World`, group:'worldhist',
+    blurb:`The world after 1991 — globalisation, unipolarity, rise of China, global terrorism and the emerging multipolar order.`,
+    subtopics:[
+      {name:`Global Issues Since 1991`, context:`Globalisation, WTO, climate change, terrorism, nuclear proliferation — the post-Cold War agenda.`},
+      {name:`Integration of Europe`, context:`European Union's evolution from EEC to EU; Maastricht Treaty 1992; Euro zone; Brexit 2016 and its implications.`},
+      {name:`European Integration — A Timeline`, context:`1951 ECSC → 1957 EEC → 1993 EU → 1999 Euro → 2007 Lisbon Treaty → 2016 Brexit vote.`},
+      {name:`Rise of Global Islamic Terrorism`, context:`Al-Qaeda, 9/11, US War on Terror, ISIS, Boko Haram — roots, spread, counter-terrorism responses.`},
+      {name:`Rise of China`, context:`Deng Xiaoping's reforms, WTO entry 2001, Belt and Road Initiative, South China Sea, China-India tensions.`},
+      {name:`Collapse of USSR and New States`, context:`15 successor states, Russia's identity crisis, NATO expansion debate, Ukraine conflict roots.`},
+      {name:`Globalisation and Its Discontents`, context:`Economic globalisation's benefits and costs; inequality, cultural homogenisation, anti-globalisation movements.`},
+      {name:`Impact on India`, context:`LPG reforms 1991 link to global context; India's Look East Policy; BRICS, SCO; strategic autonomy in multipolar world.`}
+    ]},
+  { id:61, era:'worldhist', icon:'⚖️', title:`Communism, Socialism and Capitalism`, group:'worldhist',
+    blurb:`The three great ideological systems of the modern world — their theory, practice, mutual conflict and contemporary relevance.`,
+    subtopics:[
+      {name:`Capitalism — Concept, Types and Example`, context:`Laissez-faire to regulated capitalism; Adam Smith, Ricardo; industrial capitalism, finance capitalism, crony capitalism.`},
+      {name:`Communism — Concept, Types and Example`, context:`Marx-Engels, Communist Manifesto 1848, Das Kapital; Leninism, Stalinism, Maoism — variants and outcomes.`},
+      {name:`Socialism`, context:`Utopian socialism (Owen, Fourier), scientific socialism (Marx), democratic socialism, Fabianism; India's socialist path.`},
+      {name:`Relevance of Capitalism in Present Era`, context:`Varieties of capitalism post-1991; welfare state model; neoliberalism; Piketty's inequality debate; state capitalism (China).`},
+      {name:`Welfare State Concept`, context:`Beveridge Report 1942, NHS, Scandinavian model; erosion under neoliberalism; relevance for India's social policy.`},
+      {name:`Impact on India`, context:`Nehruvian socialism, mixed economy, 1991 shift; ideological influences on INC, Left parties; DPSP Article 38–43.`}
+    ]},
+  { id:62, era:'worldhist', icon:'⚙️', title:`Industrial Revolution & Scientific Developments`, group:'worldhist',
+    blurb:`The technological transformation of the world — from the steam engine to the digital age — and its political consequences.`,
+    subtopics:[
+      {name:`Industrial Revolution — Causes`, context:`British preconditions: coal and iron, enclosure movement, capital, empire markets, Protestant work ethic, patent system.`},
+      {name:`Industrial Revolution — Impact`, context:`Factory system, urbanisation, child labour, Luddites, trade unions, imperialism's acceleration, environmental damage.`},
+      {name:`Spread of Industrial Revolution`, context:`From Britain to France, Germany, USA, Japan, Russia; why some countries industrialised later — comparative analysis.`},
+      {name:`Second Industrial Revolution (1870–1914)`, context:`Electricity, steel, chemicals, petroleum, assembly line (Ford); monopolies and trusts; impact on warfare.`},
+      {name:`Impact on India`, context:`Deindustrialisation, railways as colonial instrument, drain of wealth, Swadeshi as response.`}
+    ]},
+  { id:63, era:'worldhist', icon:'🏳️', title:`Decolonisation and Third World`, group:'worldhist',
+    blurb:`The dismantling of European empires after WWII — Africa, Asia, Latin America and the making of the Third World.`,
+    subtopics:[
+      {name:`Causes of Decolonisation`, context:`WWII weakening of European powers, Atlantic Charter 1941, UN pressure, nationalist movements' strength, US-USSR anti-colonialism.`},
+      {name:`Africa — Decolonisation`, context:`Ghana 1957 (Nkrumah), Kenya (Mau Mau), Algeria (FLN), South Africa (apartheid and ANC), Congo crisis.`},
+      {name:`Asia — Decolonisation`, context:`India 1947, Indonesia 1945, Vietnam struggle, China's revolution 1949, Korean War as Cold War-decolonisation intersection.`},
+      {name:`Bandung Conference (1955)`, context:`29 Asian-African nations; founding of Non-Aligned Movement; Nehru, Nasser, Sukarno; five principles of Panchsheel.`},
+      {name:`Problems of the Newly Decolonised States`, context:`Arbitrary borders, ethnic conflict, economic dependency, military coups, neo-colonialism, Cold War proxy conflicts.`},
+      {name:`India's Role in Decolonisation`, context:`Gandhi's influence on MLK, Mandela; India at UN against colonialism; support for African liberation; South-South cooperation.`}
+    ]}
+];
+
+const historyGroups = [
+  {id:'ancient',    num:'01', eyebrow:'WHERE IT BEGINS',     name:'Ancient History'},
+  {id:'medieval',   num:'02', eyebrow:'EMPIRES & DYNASTIES', name:'Medieval History'},
+  {id:'modern',     num:'03', eyebrow:'COLONIAL INDIA',      name:'Modern History'},
+  {id:'postindep',  num:'04', eyebrow:'BUILDING A NATION',   name:'Post-Independence'},
+  {id:'worldhist',  num:'05', eyebrow:'BEYOND INDIA',        name:'World History'}
+];
+
+const eraMeta = {
+  ancient:    {label:'Ancient',            hex:'#c99a3c'},
+  medieval:   {label:'Medieval',           hex:'#a13b3b'},
+  modern:     {label:'Modern',             hex:'#2f7d3a'},
+  postindep:  {label:'Post-Independence',  hex:'#2a5599'},
+  worldhist:  {label:'World History',      hex:'#6a3fa0'}
+};
+const groupColor = { ancient:eraMeta.ancient.hex, medieval:eraMeta.medieval.hex, modern:eraMeta.modern.hex, postindep:eraMeta.postindep.hex, worldhist:eraMeta.worldhist.hex };
+
+const tracks = {
+  history: { label:'Indian & World History', icon:'📜', trailTitle:'History trail', topics:topics, groups:historyGroups, chips:['all','ancient','medieval','modern','postindep','worldhist'] }
+};
+let currentTrackId = 'history';
+function cfg(){ return tracks[currentTrackId]; }
+
+function hexToRgb(hex){
+  hex = hex.replace('#','');
+  return { r:parseInt(hex.substring(0,2),16), g:parseInt(hex.substring(2,4),16), b:parseInt(hex.substring(4,6),16) };
+}
+function rgba(hex, a){ const c = hexToRgb(hex); return `rgba(${c.r},${c.g},${c.b},${a})`; }
+
+/* ---------------------------------------------------------------
+   STATE
+--------------------------------------------------------------- */
+let activeChip = 'all';
+let selectedTopicId = topics[0].id;
+let selectedSubIdx = null; // null = topic overview view
+let completed = new Set(); // ids like "3-2"
+let notes = {}; // key ("t-<topicId>" or "<topicId>-<subIdx>") -> note text
+let notesOpen = false;
+
+/* ---------------------------------------------------------------
+   PERSISTENCE
+--------------------------------------------------------------- */
+async function loadProgress(){
+  try{
+    const arr = await window.cloud.loadProgress();
+    completed = new Set(arr || []);
+  }catch(e){ completed = new Set(); }
+}
+async function saveProgress(){
+  try{ await window.cloud.saveProgress([...completed]); }
+  catch(e){ /* cloud save failed — progress stays in-memory only this session */ }
+}
+
+/* Notes are saved to Firebase Firestore (see the <script type="module">
+   near the end of this file), so they follow the signed-in user across
+   devices instead of staying in one browser only. */
+async function loadNotes(){
+  try{ notes = await window.cloud.loadNotes() || {}; }
+  catch(e){ notes = {}; }
+}
+function saveNotes(){
+  window.cloud.saveNotes(notes).catch(()=>{ /* cloud save failed — notes stay in-memory only this session */ });
+}
+function currentNoteKey(){
+  return selectedSubIdx===null ? ('t-'+selectedTopicId) : (selectedTopicId+'-'+selectedSubIdx);
+}
+function escapeHtml(str){
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function getNoteData(key){
+  const raw = notes[key];
+  if(!raw) return {html:'', size:16};
+  if(typeof raw === 'string'){
+    // migrate old plain-text note format
+    return {html: escapeHtml(raw).replace(/\n/g,'<br>'), size:16};
+  }
+  return {html: raw.html||'', size: raw.size||16};
+}
+function noteHasContent(key){
+  const data = getNoteData(key);
+  return !!(data.html && data.html.replace(/<[^>]*>/g,'').replace(/&nbsp;/g,' ').trim());
+}
+function handleNotePaste(e){
+  e.preventDefault();
+  const cd = e.clipboardData || window.clipboardData;
+  const text = cd.getData('text/plain') || '';
+  const html = cd.getData('text/html');
+  /* "Copy code" buttons (chat apps, docs sites, GitHub) almost always write
+     PLAIN TEXT ONLY to the clipboard, on purpose, so no colors ever arrive
+     via text/html for those. So: if the pasted text looks like code, always
+     run it through our own highlighter first regardless of what else is on
+     the clipboard — this is what actually makes colors show up reliably. */
+  if(looksLikeCode(text)){
+    const highlighted = highlightCode(text);
+    document.execCommand('insertHTML', false, '<pre class="note-code-block"><code>'+highlighted+'</code></pre><p><br></p>');
+    return;
+  }
+  if(html && html.trim()){
+    try{
+      const baked = bakeComputedStyles(html);
+      const clean = sanitizePastedHtml(baked);
+      document.execCommand('insertHTML', false, clean);
+      return;
+    }catch(err){ /* fall through to plain text below */ }
+  }
+  document.execCommand('insertText', false, text);
+}
+/* Heuristic: does this pasted plain text look like source code? Requires at
+   least two independent signals so ordinary prose (that happens to mention
+   "class" or contain one semicolon) isn't mistaken for code. */
+function looksLikeCode(text){
+  if(!text) return false;
+  const trimmed = text.trim();
+  if(trimmed.length < 8) return false;
+  const lines = trimmed.split('\n');
+  const braceCount = (trimmed.match(/[{}]/g) || []).length;
+  const semiLines = lines.filter(l=>/;\s*$/.test(l.trim())).length;
+  const indentedLines = lines.filter(l=>/^[ \t]{2,}\S/.test(l)).length;
+  const keywordHit = /\b(public|private|protected|static|final|void|class|interface|extends|implements|import|package|function|def|const|let|var|#include|System\.out|console\.log|SELECT |INSERT |UPDATE )\b|(?:return|if|for|while)\s*\(/.test(trimmed);
+  let score = 0;
+  if(braceCount >= 2) score++;
+  if(semiLines >= 2) score++;
+  if(indentedLines >= 2) score++;
+  if(keywordHit) score++;
+  return score >= 2;
+}
+/* For genuine rich-HTML paste (selecting & copying text on a real web page,
+   not a "copy code" button): inserts the fragment into a hidden, attached
+   element so the browser actually computes its styles — including colors
+   that came from CSS classes rather than inline style attributes — then
+   bakes those computed values into explicit inline styles before the
+   sanitizer runs. Without this step, class-based coloring (very common:
+   most syntax highlighters use CSS classes, not inline styles) would be
+   silently lost once classes are stripped for safety. */
+function bakeComputedStyles(html){
+  const holder = document.createElement('div');
+  holder.style.position = 'fixed';
+  holder.style.left = '-99999px';
+  holder.style.top = '0';
+  holder.style.pointerEvents = 'none';
+  holder.innerHTML = html;
+  document.body.appendChild(holder);
+  try{
+    holder.querySelectorAll('*').forEach(el=>{
+      const cs = window.getComputedStyle(el);
+      const parts = [];
+      if(cs.color) parts.push('color:'+cs.color);
+      if(cs.backgroundColor && cs.backgroundColor !== 'rgba(0, 0, 0, 0)' && cs.backgroundColor !== 'transparent') parts.push('background-color:'+cs.backgroundColor);
+      if(cs.fontWeight && parseInt(cs.fontWeight,10) >= 600) parts.push('font-weight:'+cs.fontWeight);
+      if(cs.fontStyle === 'italic') parts.push('font-style:italic');
+      if(cs.textDecorationLine && cs.textDecorationLine !== 'none') parts.push('text-decoration:'+cs.textDecorationLine);
+      if(cs.fontFamily && /mono|consolas|courier|menlo/i.test(cs.fontFamily)) parts.push('font-family:'+cs.fontFamily);
+      if(parts.length) el.setAttribute('style', parts.join(';'));
+      el.removeAttribute('class');
+    });
+    holder.querySelectorAll('style,link').forEach(n=>n.remove());
+    return holder.innerHTML;
+  } finally {
+    document.body.removeChild(holder);
+  }
+}
+/* Keeps the useful structure from pasted content (bullet/numbered lists,
+   bold/italic, headings, code coloring already present in the source's
+   HTML clipboard) while stripping anything unsafe or irrelevant
+   (scripts, iframes, forms, images, tracking attributes, classes...). */
+function sanitizePastedHtml(html){
+  const allowedTags = new Set(['P','BR','B','STRONG','I','EM','U','S','STRIKE','UL','OL','LI',
+    'SPAN','DIV','H1','H2','H3','H4','PRE','CODE','A','TABLE','THEAD','TBODY','TR','TD','TH','BLOCKQUOTE','HR']);
+  const removeTags = new Set(['SCRIPT','STYLE','IFRAME','OBJECT','EMBED','FORM','INPUT','BUTTON',
+    'IMG','SVG','LINK','META','NOSCRIPT','VIDEO','AUDIO','SOURCE','SELECT','TEXTAREA']);
+  const allowedStyleProps = ['color','background-color','background','font-weight','font-style','text-decoration','font-family'];
+  let doc;
+  try{ doc = new DOMParser().parseFromString(html, 'text/html'); }
+  catch(e){ return ''; }
+  (function clean(node){
+    [...node.childNodes].forEach(child=>{
+      if(child.nodeType === 1){
+        const tag = child.tagName;
+        if(removeTags.has(tag)){ node.removeChild(child); return; }
+        if(!allowedTags.has(tag)){
+          while(child.firstChild) node.insertBefore(child.firstChild, child);
+          node.removeChild(child);
+          return;
+        }
+        [...child.attributes].forEach(attr=>{
+          const name = attr.name.toLowerCase();
+          if(name === 'href' && tag === 'A'){
+            if(!/^https?:|^mailto:/i.test(attr.value)) child.removeAttribute('href');
+            return;
+          }
+          if(name === 'style'){
+            const kept = attr.value.split(';').filter(rule=>{
+              const prop = (rule.split(':')[0] || '').trim().toLowerCase();
+              return allowedStyleProps.includes(prop);
+            }).join(';');
+            if(kept) child.setAttribute('style', kept); else child.removeAttribute('style');
+            return;
+          }
+          child.removeAttribute(attr.name);
+        });
+        if(tag === 'A'){ child.setAttribute('target','_blank'); child.setAttribute('rel','noopener noreferrer'); }
+        clean(child);
+      } else if(child.nodeType === 8){
+        node.removeChild(child);
+      }
+    });
+  })(doc.body);
+  return doc.body.innerHTML;
+}
+/* Lightweight VS Code "Dark+"-style highlighter for pasted/typed code that
+   didn't already carry its own colors. Select code in the note, then use
+   the </> button in the ribbon. */
+function highlightCode(raw){
+  const esc = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const pattern = /(\/\/[^\n]*)|(\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\])*")|('(?:\\.|[^'\\])*')|(@[A-Za-z_]\w*)|(\b\d+\.?\d*[fFdDlL]?\b)|(\b(?:public|private|protected|static|final|void|new|class|interface|extends|implements|return|if|else|for|while|do|switch|case|break|continue|try|catch|finally|throw|throws|import|package|this|super|null|true|false|instanceof|enum|abstract|synchronized|volatile|transient|const|default|assert|int|long|short|byte|char|boolean|float|double|function|let|var)\b)|(\b[A-Z]\w*\b)/g;
+  return esc.replace(pattern, (m, cmt1, cmt2, dstr, sstr, anno, num, kw, type)=>{
+    if(cmt1 || cmt2) return '<span style="color:#6a9955">'+m+'</span>';
+    if(dstr || sstr) return '<span style="color:#ce9178">'+m+'</span>';
+    if(anno) return '<span style="color:#dcdcaa">'+m+'</span>';
+    if(num) return '<span style="color:#b5cea8">'+m+'</span>';
+    if(kw) return '<span style="color:#c586c0">'+m+'</span>';
+    if(type) return '<span style="color:#4ec9b0">'+m+'</span>';
+    return m;
+  });
+}
+function insertCodeBlock(){
+  const ta = document.getElementById('notesArea');
+  if(!ta) return;
+  ta.focus();
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount === 0 || sel.isCollapsed){ toast('Select some code first, then click </>'); return; }
+  const raw = sel.toString();
+  if(!raw.trim()){ toast('Select some code first, then click </>'); return; }
+  const highlighted = highlightCode(raw);
+  document.execCommand('insertHTML', false, '<pre class="note-code-block"><code>'+highlighted+'</code></pre><p><br></p>');
+  onNoteInput(ta);
+}
+function onNoteInput(ta){
+  const key = currentNoteKey();
+  const size = parseInt(ta.style.fontSize,10) || 16;
+  notes[key] = { html: ta.innerHTML, size };
+  saveNotes();
+  updateNotesBtnState();
+}
+function formatNote(cmd){
+  const ta = document.getElementById('notesArea');
+  if(!ta) return;
+  ta.focus();
+  if(cmd === 'highlight'){
+    try{ document.execCommand('hiliteColor', false, '#fff59d'); }
+    catch(e){ document.execCommand('backColor', false, '#fff59d'); }
+  } else if(cmd === 'paste'){
+    // Programmatic paste is blocked by browsers for security; ask the user to use Ctrl/Cmd+V.
+    toast('Use Ctrl/Cmd+V to paste');
+    return;
+  } else if(cmd === 'cut' || cmd === 'copy'){
+    try{ document.execCommand(cmd, false, null); }
+    catch(e){ /* clipboard access may be blocked in this context */ }
+  } else {
+    document.execCommand(cmd, false, null);
+  }
+  onNoteInput(ta);
+}
+function setNoteHeading(tag){
+  const ta = document.getElementById('notesArea');
+  if(!ta) return;
+  ta.focus();
+  try{ document.execCommand('formatBlock', false, tag === 'P' ? 'P' : tag); }
+  catch(e){ /* formatBlock unsupported in this context */ }
+  onNoteInput(ta);
+}
+function changeNoteFontSize(delta){
+  const ta = document.getElementById('notesArea');
+  if(!ta) return;
+  const current = parseInt(ta.style.fontSize,10) || 16;
+  const size = Math.max(12, Math.min(32, current + delta*2));
+  ta.style.fontSize = size+'px';
+  onNoteInput(ta);
+}
+function updateNotesBtnState(){
+  const btn = document.getElementById('notesBtn');
+  if(!btn) return;
+  const has = noteHasContent(currentNoteKey());
+  btn.classList.toggle('has-note', has);
+  btn.innerHTML = has ? '📝 Notes ✓' : '📝 Notes';
+}
+function openNotes(){
+  const t = cfg().topics.find(t=>t.id===selectedTopicId);
+  const key = currentNoteKey();
+  const data = getNoteData(key);
+
+  // Notebook + section tabs, OneNote-style
+  document.getElementById('notesNotebookName').textContent = cfg().icon + ' ' + cfg().label;
+  const crumbTab = document.getElementById('notesTabCrumb');
+  const activeTab = document.getElementById('notesTabActive');
+  const titleEl = document.getElementById('notesTitle');
+
+  const era = t ? eraMeta[t.era] : null;
+  const accent = era ? era.hex : '#c0525b';
+  document.getElementById('notesTabsBar').style.setProperty('--tab-accent', accent);
+  activeTab.style.background = '#fff';
+  activeTab.style.boxShadow = `inset 0 -3px 0 ${accent}`;
+  crumbTab.style.background = rgba(accent,.16);
+  crumbTab.style.color = '#3a3a3a';
+
+  if(selectedSubIdx===null){
+    crumbTab.textContent = t ? t.title : '';
+    crumbTab.style.display = t ? '' : 'none';
+    activeTab.textContent = 'Topic notes';
+    titleEl.textContent = t ? t.title : 'Topic notes';
+  }else{
+    const s = t.subtopics[selectedSubIdx];
+    crumbTab.textContent = t.title;
+    crumbTab.style.display = '';
+    activeTab.textContent = s.name;
+    titleEl.textContent = s.name;
+  }
+
+  // Date / time, OneNote page-header style
+  const now = new Date();
+  document.getElementById('notesDate').textContent = now.toLocaleDateString(undefined, { day:'numeric', month:'short', year:'numeric' });
+  document.getElementById('notesTime').textContent = now.toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit' });
+
+  const ta = document.getElementById('notesArea');
+  ta.innerHTML = data.html;
+  ta.style.fontSize = data.size + 'px';
+  notesOpen = true;
+  document.getElementById('notesBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(()=>{
+    ta.focus();
+    const range = document.createRange();
+    range.selectNodeContents(ta);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+}
+function closeNotes(){
+  notesOpen = false;
+  document.getElementById('notesBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleNotes(e){
+  if(e) e.stopPropagation();
+  const backdrop = document.getElementById('notesBackdrop');
+  if(backdrop.classList.contains('open')) closeNotes();
+  else openNotes();
+}
+function manualSaveNotes(){
+  const ta = document.getElementById('notesArea');
+  if(ta) onNoteInput(ta);
+  const btn = document.getElementById('notesSaveBtn');
+  if(btn){
+    btn.textContent = 'Saved ✓';
+    btn.classList.add('saved');
+    setTimeout(()=>{ btn.textContent = 'Save'; btn.classList.remove('saved'); }, 1400);
+  }
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    const backdrop = document.getElementById('notesBackdrop');
+    if(backdrop && backdrop.classList.contains('open')) closeNotes();
+  }
+});
+
+/* ---------------------------------------------------------------
+   PROMPT TEMPLATE
+--------------------------------------------------------------- */
+function groupLabelFor(t){
+  const g = cfg().groups.find(g=>g.id===t.group);
+  return (g ? g.name : '') + ' — ' + eraMeta[t.era].label;
+}
+
+function buildPrompt(t, s) {
+  const eraLabel = t.era === 'medieval'
+    ? 'Medieval History (UPSC GS Paper 1)'
+    : t.era === 'modern'
+    ? 'Modern History (UPSC GS Paper 1)'
+    : t.era === 'postindep'
+    ? 'Post Independence Consolidation (UPSC GS Paper 1)'
+    : t.era === 'worldhist'
+    ? 'World History (UPSC GS Paper 1)'
+    : 'Ancient History (UPSC GS Paper 1)';
+  return `Act as a senior UPSC Civil Services Mains faculty member specialising in ${eraLabel}. I need a complete, self-sufficient, exam-ready study note on ONE specific micro-topic. It must be detailed enough that I do not need any other source for this topic.
+
+📌 ERA: ${eraLabel}
+📌 MAIN TOPIC: ${t.title}
+📍 SUBTOPIC (focus ONLY on this): ${s.name}
+ℹ️ CONTEXT: ${s.context}
+
+Produce the note under EXACTLY these 7 headings. Be specific — use real names, dates, battles, treaties, texts, rulers and places throughout. Zero vague or generic statements.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. 📌 KEY FACTS & OVERVIEW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• All critical dates, rulers/persons, places, texts, treaties and figures strictly related to "${s.name}"
+• One-line sharp definitions of every key term a student must know
+• A tight 3–4 line summary of what this subtopic is about
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. 🏛️ DETAILED NOTES (minimum 500 words)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Write in structured prose with sub-headings. Cover whichever of these dimensions are relevant:
+  A. Political — rulers, events, wars, treaties, successions, administration
+  B. Economic — trade, revenue, agrarian, craft, monetary aspects
+  C. Social — caste, gender, community, mobility, slavery
+  D. Cultural/Religious — art, architecture, literature, religion, syncretic traditions
+  E. Military/Diplomatic — battles, strategies, foreign relations (if central to this subtopic)
+
+Include:
+• Causes, key features/developments and consequences
+• Historiographical debates if applicable (mention specific historians: RS Sharma, Satish Chandra, Irfan Habib, Romila Thapar, Harbans Mukhia, Jadunath Sarkar, etc.)
+• This section alone should be sufficient to write any Mains answer on this subtopic
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. 🎯 UPSC MAINS RELEVANCE & GS PAPER 1 ANGLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Exact GS Paper 1 syllabus theme(s) this subtopic falls under
+• 3–4 specific analytical/thematic angles examiners typically test (e.g. continuity vs change, cause-effect, comparative analysis, contemporary relevance, multi-causal explanation)
+• Common mistakes students make in answers on this topic
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. 📝 PREVIOUS YEAR QUESTIONS (PYQs)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+List 5–7 actual UPSC Mains questions on this subtopic or closely connected themes. Format each as:
+  [UPSC Mains YEAR – Marks if known] Full question text
+
+Also list 1–2 relevant Prelims MCQ themes if applicable.
+If exact PYQs don't exist for this micro-topic, give the closest related ones and label them "Related PYQ".
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. ✍️ MODEL ANSWER POINTERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+For a 150-WORD UPSC Mains answer:
+  → Introduction (1–2 lines with context)
+  → 3–4 core points (each a crisp bullet)
+  → Conclusion (1 line with significance/contemporary link)
+
+For a 250-WORD UPSC Mains answer:
+  → Introduction with historical context
+  → 4–5 dimensions (political/economic/social/cultural) with specific examples/evidence
+  → Analytical remark or historian's view
+  → Balanced conclusion with contemporary relevance if any
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. 🔗 CONNECTIONS & LINKAGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• How "${s.name}" connects to preceding and succeeding periods/topics in History
+• Cross-paper links: Indian Society (GS1), Economy (GS3), Polity (GS2), Art & Culture (GS1), Ethics (GS4) — wherever genuinely relevant
+• Comparison with any similar phenomenon in Ancient, Medieval or Modern India
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. 📚 RECOMMENDED SOURCES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Specific NCERT chapters (Old NCERTs: RS Sharma / Satish Chandra; New NCERTs: Themes in Indian History Parts I/II/III)
+• Standard references with exact chapter/section specifically for THIS subtopic
+• Any primary source, inscription, traveller account, chronicle directly related to this topic
+• One online/video resource if particularly useful
+
+FORMAT: Use the numbered headings exactly as above. Bold all key terms, names, dates. Structured prose for Section 2; bullet points for facts and lists elsewhere. Total response must be comprehensive enough to serve as a STANDALONE revision note for this specific subtopic.`;
+}
+
+/* ---------------------------------------------------------------
+   RENDER: chips
+--------------------------------------------------------------- */
+function renderChips(){
+  const row = document.getElementById('chipRow');
+  row.innerHTML = cfg().chips.map(c=>{
+    const label = c==='all' ? 'All' : eraMeta[c].label;
+    const hex = c==='all' ? eraMeta[cfg().chips[1]].hex : eraMeta[c].hex;
+    const isActive = c===activeChip;
+    const style = isActive
+      ? `style="background:${rgba(hex,.32)};border-color:${rgba(hex,.6)};box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 6px 16px ${rgba(hex,.25)};"`
+      : '';
+    return `<button class="chip ${isActive?'active':''}" ${style} onclick="setChip('${c}')">${label}</button>`;
+  }).join('');
+}
+function setChip(c){ activeChip = c; renderTrail(); }
+function toggleLegend(){ document.getElementById('legendPop').classList.toggle('show'); }
+document.addEventListener('click', (e)=>{
+  const wrap = document.querySelector('.legend-wrap');
+  if(wrap && !wrap.contains(e.target)) document.getElementById('legendPop').classList.remove('show');
+});
+
+/* ---------------------------------------------------------------
+   TRACK SWITCHING
+--------------------------------------------------------------- */
+function selectTrack(id){
+  if(currentTrackId===id) return;
+  currentTrackId = id;
+  activeChip = 'all';
+  selectedTopicId = cfg().topics[0].id;
+  selectedSubIdx = null;
+  document.querySelectorAll('.track-tab[data-track]').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.track===id);
+  });
+  document.getElementById('trailIcon').textContent = cfg().icon;
+  document.getElementById('trailTitleText').innerHTML = cfg().trailTitle;
+  document.getElementById('searchInput').value = '';
+  renderTrail();
+}
+
+/* ---------------------------------------------------------------
+   RENDER: trail (left column)
+--------------------------------------------------------------- */
+function progressForTopic(t){
+  const done = t.subtopics.filter((_,i)=>completed.has(t.id+'-'+i)).length;
+  return `${done}/${t.subtopics.length}`;
+}
+function totalStats(){
+  let total=0, done=0;
+  cfg().topics.forEach(t=>{ total+=t.subtopics.length; t.subtopics.forEach((_,i)=>{ if(completed.has(t.id+'-'+i)) done++; }); });
+  return {total, done};
+}
+
+function renderTrail(){
+  renderChips();
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const groupList = document.getElementById('groupList');
+  let html = '';
+
+  cfg().groups.forEach(g=>{
+    let ts = cfg().topics.filter(t=>t.group===g.id);
+    if(activeChip!=='all') ts = ts.filter(t=>t.era===activeChip);
+    if(q){
+      ts = ts.filter(t=> t.title.toLowerCase().includes(q) || t.subtopics.some(s=>s.name.toLowerCase().includes(q)) );
+    }
+    if(ts.length===0) return;
+    const gHex = groupColor[g.id];
+    html += `<div class="group-block" style="--group-bg:${rgba(gHex,.16)};--group-border:${rgba(gHex,.32)};--group-accent:${gHex};">
+      <div class="group-eyebrow"><span class="num">${g.num}</span>${g.eyebrow}</div>
+      <div class="group-name"><span class="group-dot" style="background:${gHex}"></span>${g.name}</div>`;
+    ts.forEach(t=>{
+      const sel = t.id===selectedTopicId ? 'selected' : '';
+      const hex = eraMeta[t.era].hex;
+      const rowStyle = sel
+        ? `style="--accent-line:${rgba(hex,.55)};--accent-soft:${rgba(hex,.14)};"`
+        : '';
+      html += `<div class="topic-row ${sel}" ${rowStyle} onclick="selectTopic(${t.id})">
+        <div class="topic-icon-sm" style="background:${rgba(hex,.2)}">${t.icon}</div>
+        <div class="topic-row-text">
+          <div class="topic-row-title">${t.title}</div>
+          <div class="topic-row-sub">${progressForTopic(t)} subtopics</div>
+        </div>
+        <div class="topic-row-chev">›</div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  if(!html){ html = `<div class="empty-note">No waypoints match that search.</div>`; }
+  groupList.innerHTML = html;
+
+  const stats = totalStats();
+  document.getElementById('trailMeta').textContent = `${cfg().topics.length} WAYPOINTS · ${stats.done}/${stats.total} MAPPED`;
+
+  renderSubList();
+  renderDetail();
+  alignSubCardToSelected();
+}
+
+/* ---------------------------------------------------------------
+   Keep the subtopics box vertically level with the selected row
+--------------------------------------------------------------- */
+function alignSubCardToSelected(){
+  requestAnimationFrame(()=>{
+    const row = document.querySelector('.topic-row.selected');
+    const subCard = document.getElementById('subCard');
+    const detailPanel = document.getElementById('detailPanel');
+    const grid = document.querySelector('.grid');
+    if(!row || !grid) return;
+    const gridTop = grid.getBoundingClientRect().top;
+    const rowTop = row.getBoundingClientRect().top;
+    const trailHeight = document.getElementById('trailCard').offsetHeight;
+    let rawOffset = Math.max(0, rowTop - gridTop);
+
+    if(subCard){
+      const maxOffset = Math.max(0, trailHeight - subCard.offsetHeight);
+      subCard.style.marginTop = Math.min(rawOffset, maxOffset) + 'px';
+    }
+    if(detailPanel){
+      const maxOffset = Math.max(0, trailHeight - detailPanel.offsetHeight);
+      detailPanel.style.marginTop = Math.min(rawOffset, maxOffset) + 'px';
+    }
+  });
+}
+window.addEventListener('resize', alignSubCardToSelected);
+
+/* ---------------------------------------------------------------
+   RENDER: subtopics (middle column)
+--------------------------------------------------------------- */
+function selectTopic(id){
+  selectedTopicId = id;
+  selectedSubIdx = null;
+  notesOpen = false;
+  renderTrail();
+}
+function renderSubList(){
+  const t = cfg().topics.find(t=>t.id===selectedTopicId);
+  const hex = eraMeta[t.era].hex;
+  const subCard = document.getElementById('subCard');
+  retriggerAnim(subCard);
+  subCard.style.setProperty('--accent', hex);
+  subCard.style.setProperty('--accent-line', rgba(hex,.5));
+  subCard.style.setProperty('--accent-soft', rgba(hex,.14));
+  subCard.style.setProperty('--accent-shadow', rgba(hex,.35));
+
+  document.getElementById('subHeadTitle').textContent = `${t.subtopics.length} SUBTOPICS`;
+  const done = t.subtopics.filter((_,i)=>completed.has(t.id+'-'+i)).length;
+  document.getElementById('subProgress').textContent = `${done}/${t.subtopics.length} done`;
+
+  const list = document.getElementById('subList');
+  list.innerHTML = t.subtopics.map((s,i)=>{
+    const cid = t.id+'-'+i;
+    const isDone = completed.has(cid);
+    const isActive = selectedSubIdx===i;
+    return `<div class="sub-row ${isActive?'active':''}" onclick="selectSub(${i})">
+      <div class="sub-check ${isDone?'done':''}" onclick="event.stopPropagation(); toggleDone(${i})">${isDone?'✓':''}</div>
+      <div class="sub-label ${isDone?'done':''}">${s.name}</div>
+    </div>`;
+  }).join('');
+}
+function selectSub(i){ selectedSubIdx = i; notesOpen = false; renderSubList(); renderDetail(); }
+function toggleDone(i){
+  const t = cfg().topics.find(t=>t.id===selectedTopicId);
+  const cid = t.id+'-'+i;
+  if(completed.has(cid)) completed.delete(cid); else completed.add(cid);
+  saveProgress();
+  renderTrail();
+}
+
+/* ---------------------------------------------------------------
+   RENDER: detail panel (right column)
+--------------------------------------------------------------- */
+function themePanel(panel, hex){
+  panel.style.setProperty('--accent', hex);
+  panel.style.setProperty('--accent-a', rgba(hex,.6));
+  panel.style.setProperty('--accent-b', rgba(hex,.22));
+  panel.style.setProperty('--accent-border', rgba(hex,.65));
+  panel.style.setProperty('--accent-border-soft', rgba(hex,.32));
+  panel.style.setProperty('--accent-shadow', rgba(hex,.4));
+  panel.style.setProperty('--accent-soft-dark', rgba(hex,.22));
+  panel.style.background =
+    `radial-gradient(circle at 105% -10%, ${rgba(hex,.35)}, transparent 55%), ` +
+    `radial-gradient(circle at -10% 110%, ${rgba(hex,.16)}, transparent 50%), var(--dark)`;
+}
+
+function retriggerAnim(el){
+  if(!el) return;
+  el.classList.remove('reanim');
+  void el.offsetWidth; // force reflow so the animation restarts
+  el.classList.add('reanim');
+}
+
+function renderDetail(){
+  const t = cfg().topics.find(t=>t.id===selectedTopicId);
+  const panel = document.getElementById('detailPanel');
+  const era = eraMeta[t.era];
+  const g = cfg().groups.find(g=>g.id===t.group);
+  themePanel(panel, era.hex);
+  retriggerAnim(panel);
+
+  if(selectedSubIdx===null){
+    const hasNote = noteHasContent(currentNoteKey());
+    panel.innerHTML = `
+      <div class="badge-row">
+        <span class="badge" style="background:${era.hex}">${era.label}</span>
+        <div class="badge-row-right">
+          <span class="badge-count">${t.subtopics.length} subtopics</span>
+          <button class="notes-btn ${hasNote?'has-note':''}" id="notesBtn" onclick="toggleNotes(event)">📝 Notes${hasNote?' ✓':''}</button>
+        </div>
+      </div>
+      <div class="detail-eyebrow">${g.eyebrow}</div>
+      <h2 class="detail-title">${t.icon} ${t.title}</h2>
+      <p class="detail-blurb">${t.blurb}</p>
+      <button class="detail-btn dark" onclick="selectSub(0)">Start learning →</button>
+      <div class="detail-divider"></div>
+      <div class="note-label">Learning note</div>
+      <div class="note-text">There is no perfect order. Follow the trail, master one subtopic at a time using its Claude prompt, then come back and rebuild something with it.</div>
+    `;
+    return;
+  }
+
+  const s = t.subtopics[selectedSubIdx];
+  const cid = t.id+'-'+selectedSubIdx;
+  const isDone = completed.has(cid);
+  const prompt = buildPrompt(t, s).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const hasNote = noteHasContent(currentNoteKey());
+
+  panel.innerHTML = `
+    <div class="badge-row">
+      <span class="badge" style="background:${era.hex}">SUBTOPIC</span>
+      <div class="badge-row-right">
+        <span class="badge-count">${selectedSubIdx+1} of ${t.subtopics.length}</span>
+        <button class="notes-btn ${hasNote?'has-note':''}" id="notesBtn" onclick="toggleNotes(event)">📝 Notes${hasNote?' ✓':''}</button>
+      </div>
+    </div>
+    <div class="detail-crumb">↳ ${t.title}</div>
+    <h2 class="detail-title" style="font-size:24px;">${s.name}</h2>
+    <div class="context-line">${s.context}</div>
+    <div class="note-label">Claude study prompt</div>
+    <div class="prompt-box" id="promptBox">${prompt}</div>
+    <button class="detail-btn gold" id="copyBtn" onclick="copyPrompt('${cid}')">Copy prompt</button>
+    <button class="detail-btn ${isDone?'dark':'ghost'}" onclick="toggleDone(${selectedSubIdx})">${isDone?'✓ Marked complete':'Mark as complete'}</button>
+  `;
+}
+
+async function copyPrompt(cid){
+  const t = cfg().topics.find(t=>t.id===selectedTopicId);
+  const s = t.subtopics[selectedSubIdx];
+  const text = buildPrompt(t, s);
+  const btn = document.getElementById('copyBtn');
+  try{
+    await navigator.clipboard.writeText(text);
+    btn.textContent = 'Copied ✓';
+  }catch(e){
+    // fallback for environments without clipboard API
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); btn.textContent = 'Copied ✓'; }
+    catch(e2){ btn.textContent = 'Select text above to copy'; }
+    document.body.removeChild(ta);
+  }
+  setTimeout(()=>{ btn.textContent = 'Copy prompt'; }, 1800);
+}
+
+/* ---------------------------------------------------------------
+   MISC
+--------------------------------------------------------------- */
+function toast(msg){
+  const el = document.createElement('div');
+  el.textContent = msg;
+  el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#19140d;color:#f2ede0;padding:10px 18px;border-radius:999px;font-size:13px;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.25)';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1800);
+}
+async function resetProgress(){
+  if(!confirm('Reset all progress on this trail? This cannot be undone.')) return;
+  completed = new Set();
+  await saveProgress();
+  renderTrail();
+}
+
+/* ---------------------------------------------------------------
+   INIT
+--------------------------------------------------------------- */
+window.startApp = async function(){
+  await loadProgress();
+  await loadNotes();
+  renderTrail();
+};
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider,
+    createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    signInAnonymously, signOut
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, setDoc
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  /* ------------------------------------------------------------------
+     1) Create a free project at https://console.firebase.google.com
+     2) Add a "Web app" to it, then paste the config it gives you below.
+     3) In the console, enable Authentication → Sign-in method →
+        Email/Password AND Google.
+     4) Enable Firestore Database (production mode is fine) and set the
+        security rules given in the setup notes so each user can only
+        read/write their own data.
+     5) Add your hosting domain (e.g. yoursite.netlify.app) under
+        Authentication → Settings → Authorized domains, or Google
+        sign-in will fail once this is hosted somewhere other than
+        localhost.
+  ------------------------------------------------------------------ */
+  const firebaseConfig = {
+  apiKey: "AIzaSyANNpWQfoT5hQ4bqrNSbqEfHvbmydbEPw4",
+  authDomain: "upscnotes-9e880.firebaseapp.com",
+  projectId: "upscnotes-9e880",
+  storageBucket: "upscnotes-9e880.firebasestorage.app",
+  messagingSenderId: "592133778714",
+  appId: "1:592133778714:web:47a2222f9b46c4cb96d0a3",
+  measurementId: "G-VHWDQHTK0D"
+};
+
+  const APP_KEY = "chronicler"; // namespaces this app's data inside each user's document
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  let currentUser = null;
+
+  function userDocRef(){ return doc(db, 'users', currentUser.uid); }
+
+  window.cloud = {
+    async saveNotes(notesObj){
+      if(!currentUser) return;
+      try{ await setDoc(userDocRef(), { [APP_KEY]: { notes: notesObj } }, { merge: true }); }
+      catch(e){ console.error('Cloud save (notes) failed:', e); }
+    },
+    async loadNotes(){
+      if(!currentUser) return {};
+      try{
+        const snap = await getDoc(userDocRef());
+        const data = snap.exists() ? snap.data() : null;
+        return (data && data[APP_KEY] && data[APP_KEY].notes) ? data[APP_KEY].notes : {};
+      }catch(e){ console.error('Cloud load (notes) failed:', e); return {}; }
+    },
+    async saveProgress(arr){
+      if(!currentUser) return;
+      try{ await setDoc(userDocRef(), { [APP_KEY]: { progress: arr } }, { merge: true }); }
+      catch(e){ console.error('Cloud save (progress) failed:', e); }
+    },
+    async loadProgress(){
+      if(!currentUser) return [];
+      try{
+        const snap = await getDoc(userDocRef());
+        const data = snap.exists() ? snap.data() : null;
+        return (data && data[APP_KEY] && data[APP_KEY].progress) ? data[APP_KEY].progress : [];
+      }catch(e){ console.error('Cloud load (progress) failed:', e); return []; }
+    }
+  };
+
+  function setGateError(msg){
+    const el = document.getElementById('authError');
+    if(el){ el.textContent = msg || ''; el.style.display = msg ? 'block' : 'none'; }
+  }
+  function setGateBusy(busy){
+    document.querySelectorAll('#authGate button, #authGate input').forEach(el=> el.disabled = busy);
+  }
+  function friendlyAuthError(e){
+    const code = (e && e.code) || '';
+    if(code.includes('wrong-password') || code.includes('invalid-credential')) return 'Incorrect email or password.';
+    if(code.includes('user-not-found')) return 'No account with that email — try "Sign up" instead.';
+    if(code.includes('email-already-in-use')) return 'That email already has an account — try "Sign in" instead.';
+    if(code.includes('weak-password')) return 'Password should be at least 6 characters.';
+    if(code.includes('popup-closed-by-user')) return 'Google sign-in was closed before finishing.';
+    if(code.includes('unauthorized-domain')) return 'This domain isn\'t authorized in Firebase yet — add it under Authentication → Settings → Authorized domains.';
+    return (e && e.message) || 'Something went wrong — please try again.';
+  }
+
+  document.getElementById('authGoogleBtn')?.addEventListener('click', async ()=>{
+    setGateError(''); setGateBusy(true);
+    try{ await signInWithPopup(auth, new GoogleAuthProvider()); }
+    catch(e){ setGateError(friendlyAuthError(e)); }
+    setGateBusy(false);
+  });
+  document.getElementById('authGuestBtn')?.addEventListener('click', async ()=>{
+    setGateError(''); setGateBusy(true);
+    try{ await signInAnonymously(auth); }
+    catch(e){ setGateError(friendlyAuthError(e)); }
+    setGateBusy(false);
+  });
+  document.getElementById('authSubmitBtn')?.addEventListener('click', async ()=>{
+    const email = document.getElementById('authEmail').value.trim();
+    const pass = document.getElementById('authPassword').value;
+    const mode = document.getElementById('authForm').dataset.mode || 'signin';
+    if(!email || !pass){ setGateError('Enter an email and password.'); return; }
+    setGateError(''); setGateBusy(true);
+    try{
+      if(mode === 'signup') await createUserWithEmailAndPassword(auth, email, pass);
+      else await signInWithEmailAndPassword(auth, email, pass);
+    }catch(e){ setGateError(friendlyAuthError(e)); }
+    setGateBusy(false);
+  });
+  document.getElementById('authToggleMode')?.addEventListener('click', ()=>{
+    const form = document.getElementById('authForm');
+    const isSignup = form.dataset.mode === 'signup';
+    form.dataset.mode = isSignup ? 'signin' : 'signup';
+    document.getElementById('authSubmitBtn').textContent = isSignup ? 'Sign in' : 'Create account';
+    document.getElementById('authToggleMode').textContent = isSignup ? 'Need an account? Sign up' : 'Have an account? Sign in';
+    document.getElementById('authTitle').textContent = isSignup ? 'Welcome back' : 'Create your account';
+    setGateError('');
+  });
+  document.getElementById('signOutBtn')?.addEventListener('click', async ()=>{
+    await signOut(auth);
+    location.reload();
+  });
+
+  onAuthStateChanged(auth, async (user)=>{
+    if(user){
+      currentUser = user;
+      document.getElementById('authGate').classList.remove('open');
+      document.body.style.overflow = '';
+      const box = document.getElementById('accountBox');
+      if(box){
+        box.style.display = 'flex';
+        document.getElementById('accountEmail').textContent = user.isAnonymous ? 'Guest session' : (user.email || 'Signed in');
+      }
+      if(typeof window.startApp === 'function') await window.startApp();
+    }else{
+      currentUser = null;
+      document.getElementById('authGate').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      const box = document.getElementById('accountBox');
+      if(box) box.style.display = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>
